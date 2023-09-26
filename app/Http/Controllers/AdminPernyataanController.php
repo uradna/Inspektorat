@@ -79,7 +79,7 @@ class AdminPernyataanController extends Controller
     {
         $j=Jadwal::where('status', '1')->first();
         $user=DB::select('SELECT 
-        ROW_NUMBER() OVER (ORDER BY id) AS DT_RowId,
+        users.id AS DT_RowId,
         users.id, 
         users.name, 
         CONCAT(users.nip,"‎ ") as nip, 

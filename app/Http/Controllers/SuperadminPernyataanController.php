@@ -109,7 +109,7 @@ class SuperadminPernyataanController extends Controller
         $jadwal=$j->first();
         
         $user=DB::select('SELECT 
-        ROW_NUMBER() OVER (ORDER BY pernyataan desc) AS DT_RowId,
+        users.id as DT_RowId,
         users.id, 
         users.name, 
         users.nip, 
@@ -142,7 +142,7 @@ class SuperadminPernyataanController extends Controller
         }
 
         $user=DB::select('SELECT 
-        ROW_NUMBER() OVER (ORDER BY pernyataan desc) AS DT_RowId,
+        users.id AS DT_RowId,
         users.id, 
         users.name, 
         users.nip, 

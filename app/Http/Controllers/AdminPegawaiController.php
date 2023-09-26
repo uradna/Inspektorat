@@ -31,7 +31,7 @@ class AdminPegawaiController extends Controller
     public function ajax()
     {
         $user=Auth::user();
-        $pegawai=DB::select('SELECT ROW_NUMBER() OVER (ORDER BY id) AS DT_RowId, id, email, name, nip, phone, jabatan, satker, pd FROM `users` WHERE `pd` = \''.$user->pd.'\' AND `level` = \'0\' AND `aktif` = \'1\' ');
+        $pegawai=DB::select('SELECT id AS DT_RowId, id, email, name, nip, phone, jabatan, satker, pd FROM `users` WHERE `pd` = \''.$user->pd.'\' AND `level` = \'0\' AND `aktif` = \'1\' ');
         $data = collect($pegawai);
         return response()->json([
             'data'    => $data->values()

@@ -49,7 +49,7 @@
                             <table id="datatable-buttons" class="table table-striped dt-responsive nowrap w-100">
                                 <thead class="bg-lighter">
                                     <tr>
-                                        <th data-priority="2" width="1%">#</th>
+                                        {{-- <th data-priority="2" width="1%">#</th> --}}
                                         <th data-priority="0">Nama</th>
                                         <th>NIP</th>
                                         <th>No. HP</th>
@@ -90,37 +90,34 @@
                     ajax: "{{ route('superadmin.pegawai.pd.ajax', $pd) }}",
                     dataSrc: 'data',
                     columnDefs: [{
-                            data: 'DT_RowId',
+                            data: 'name',
                             targets: 0
                         },
                         {
-                            data: 'name',
+                            data: 'nip',
                             targets: 1
                         },
                         {
-                            data: 'nip',
+                            data: 'phone',
                             targets: 2
                         },
                         {
-                            data: 'phone',
+                            data: 'jabatan',
                             targets: 3
                         },
                         {
-                            data: 'jabatan',
+                            data: 'pangkat',
                             targets: 4
                         },
                         {
-                            data: 'pangkat',
+                            data: 'satker',
                             targets: 5
                         },
                         {
-                            data: 'satker',
-                            targets: 6
-                        },
-                        {
                             data: null,
+                            className: "text-end",
                             defaultContent: '<button type="button" class="btn btn-success btn-xsm ebutton" data-bs-toggle="modal" data-bs-target="#edit"> <i class="uil-pen"></i> edit </button> <button type="button" class="btn btn-info btn-xsm pbutton" data-bs-toggle="modal" data-bs-target="#pass"><i class="uil-key-skeleton"></i> password </button> <button type="button" class="btn btn-danger btn-xsm dbutton" data-bs-toggle="modal" data-bs-target="#del"> <i class="uil-trash-alt"></i> hapus </button>',
-                            targets: 7
+                            targets: 6
                         }
                     ],
                     lengthChange: !1,

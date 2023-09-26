@@ -40,11 +40,9 @@
 
                         <div class="table-responsive">
                             <table id="datatable-buttons" class="table table-striped dt-responsive nowrap w-100">
-                                {{-- <div class="table-responsive">
-                            <table id="datatable-buttons" class="table table-striped  nowrap w-100"> --}}
                                 <thead class="bg-lighter">
                                     <tr>
-                                        <th width="1%">#</th>
+                                        {{-- <th width="1%">#</th> --}}
                                         <th data-priority="0">Nama</th>
                                         <th data-priority="3">NIP</th>
                                         <th>No. HP</th>
@@ -55,49 +53,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {{-- @php
-                                        $i = 1;
-                                    @endphp
-                                    @foreach ($user as $d)
-                                        <tr>
-                                            <td class="text-center">{{ $i++ }}</td>
-                                            <td>{{ $d->name }}</td>
-                                            <td>{{ $d->nip }}</td>
-                                            <td>
-                                                <a href="https://wa.me/62{{ substr($d->phone ?? $d->phone2, 1) }}?text=Halo Ibu/Bapak {{ $d->name }}"
-                                                    target="_blank" class="text-black-50">
-                                                    {{ $d->phone ?? $d->phone2 }}
-                                                </a>
-                                            </td>
-                                            <td>{{ $d->jabatan ?? $d->jabatan2 }}</td>
-                                            <td>{{ $d->satker ?? $d->satker2 }}</td>
-                                            <td>
-                                                @if ($d->pernyataan == 1)
-                                                    {{ konversiPilihan($d->tanya1, $d->tanya2, $d->tanya3) }}
-                                                @else ()
-                                                    -
-                                                @endif
-                                            </td>
-                                            <td class="text-left">
-                                                @if ($d->pernyataan == 0)
-                                                    <a class="btn btn-xsm btn-danger">
-                                                        <i class="mdi mdi-close"></i>
-                                                        @notmobile() belum @endnotmobile()
 
-                                                    @else
-                                                        <a class="btn btn-xsm btn-success">
-                                                            <i class="mdi mdi-check"></i>
-                                                            @notmobile() sudah @endnotmobile()
-                                                        </a>
-                                                        <a href="{{ route('pernyataan.pdf', [$jadwal->id, $d->id]) }}"
-                                                            class="btn btn-xsm btn-secondary">
-                                                            <i class="uil-down-arrow"></i>
-                                                            @notmobile() pdf @endnotmobile()
-                                                        </a>
-                                                @endif
-                                            </td>
-                                        </tr>
-                                    @endforeach --}}
                                 </tbody>
                             </table>
                         </div>
@@ -120,32 +76,29 @@
                     ajax: "{{ route('superadmin.pernyataan.terakhir.pd.ajax', $pd) }}",
                     dataSrc: 'data',
                     columnDefs: [{
-                            data: 'DT_RowId',
+                            data: 'name',
                             targets: 0
                         },
                         {
-                            data: 'name',
+                            data: 'nip',
                             targets: 1
                         },
                         {
-                            data: 'nip',
+                            data: 'phone',
                             targets: 2
                         },
                         {
-                            data: 'phone',
+                            data: 'jabatan',
                             targets: 3
                         },
                         {
-                            data: 'jabatan',
+                            data: 'satker',
                             targets: 4
                         },
                         {
-                            data: 'satker',
-                            targets: 5
-                        },
-                        {
                             data: 'tanya1',
-                            targets: 6,
+                            className: "text-end",
+                            targets: 5,
                             render: function(data, type, row) {
                                 let text = "";
                                 if (row.tanya1 !== null && row.tanya2 !== null && row.tanya3 !== null) {
@@ -172,7 +125,7 @@
                         },
                         {
                             data: 'pernyataan',
-                            targets: 7,
+                            targets: 6,
                             render: function(data, type, row) {
                                 let text = "";
                                 let url = "../../pernyataan/pdf/{{ $jadwal->id }}/" + row.id;
@@ -191,7 +144,7 @@
                         }
                     ],
                     order: [
-                        [0, 'asc']
+                        [6, 'desc']
                     ],
                     lengthChange: !1,
                     filter: !1,
