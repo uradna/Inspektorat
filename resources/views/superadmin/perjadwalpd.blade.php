@@ -15,7 +15,6 @@
                 min-width: 180px !important;
                 max-width: 700px !important;
             }
-
         </style>
     </x-slot>
 
@@ -105,7 +104,7 @@
                         },
                         {
                             data: 'tanya1',
-                            className: "text-end",
+                            // className: "text-end",
                             targets: 5,
                             render: function(data, type, row) {
                                 let text = "";
@@ -167,7 +166,7 @@
                         className: 'mb-1',
                         @endmobile()
                         action: function(e, dt, node, config) {
-                            window.open("{{ route('superadmin.pernyataan.terakhir') }}",
+                            window.open("{{ route('superadmin.pernyataan.jadwal', $id) }}",
                                 "_self");
                         }
                     }, {
@@ -218,7 +217,6 @@
                     }
                 })
             });
-
         </script>
 
         @if ($errors->any())
@@ -230,7 +228,6 @@
                     confirmButtonText: 'OK',
                     confirmButtonColor: '#fa5c7c'
                 })
-
             </script>
         @endif
     </x-slot>

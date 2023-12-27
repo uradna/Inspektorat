@@ -10,19 +10,24 @@
             .file-custom:focus {
                 outline: none;
             }
+
+            table.dataTable>tbody>tr.child span.dtr-title {
+                min-width: 180px !important;
+                max-width: 700px !important;
+            }
         </style>
     </x-slot>
 
     <x-slot name="title">
-        {{ __('Dashboard Superadmin - Data Pernyataan') }}
+        {{ __('Dashboard Superadmin ' . $jadwal->tahun . ' - Semester ' . $jadwal->semester . ' - Menerima Gratifikasi dan Belum Melapor') }}
     </x-slot>
 
     <x-slot name="breadcrumb">
         <li class="breadcrumb-item"><a href="{{ route('superadmin.dashboard') }}">Dashboard</a></li>
         <li class="breadcrumb-item"><a href="{{ route('superadmin.pernyataan') }}">Pernyataan</a></li>
-        <li class="breadcrumb-item"><a href="{{ route('superadmin.pernyataan.terakhir') }}">Tahun
+        <li class="breadcrumb-item"><a href="{{ route('superadmin.pernyataan.jadwal', [$jadwal->id]) }}">Tahun
                 {{ $jadwal->tahun }} Semester {{ $jadwal->semester }}</a></li>
-        <li class="breadcrumb-item active">{{ truncate($pd) }}</li>
+        <li class="breadcrumb-item active">Menerima Gratifikasi</li>
     </x-slot>
 
     <x-slot name="header">
@@ -34,8 +39,8 @@
             <div class="col-12">
                 <div class="card ">
                     <div class=" card-body">
-                        <h4 class="header-title mb-3">Data Pernyataan - Tahun {{ $jadwal->tahun }} Semester
-                            {{ $jadwal->semester }} - {{ $pd }} xxx</h4>
+                        <h4 class="header-title mb-3">Pernyataan Menerima Gratifikasi Dan Belum Melapor - Tahun {{ $jadwal->tahun }} Semester
+                            {{ $jadwal->semester }}</h4>
 
                         <div class="table-responsive">
                             <table id="datatable-buttons" class="table table-striped dt-responsive nowrap w-100">
@@ -44,11 +49,12 @@
                                         {{-- <th width="1%">#</th> --}}
                                         <th data-priority="0">Nama</th>
                                         <th data-priority="3">NIP</th>
-                                        <th>No. HP</th>
-                                        <th>Jabatan</th>
+                                        <th data-priority="4">No. HP</th>
+                                        <th data-priority="5">Jabatan</th>
+                                        <th>Perangkat daerah</th>
                                         <th>Satker</th>
                                         <th>Pernyataan</th>
-                                        <th data-priority="1">Status</th>
+                                        <th data-priority="2">Status</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -60,6 +66,9 @@
                 </div>
             </div>
         </div>
+
+
+
     </x-slot>
 
     <x-slot name="script">
@@ -72,7 +81,7 @@
                     @elsenotmobile()
                     dom: 'Bfrtip',
                     @endnotmobile()
-                    ajax: "{{ route('superadmin.pernyataan.terakhir.pd.ajax', $pd) }}",
+                    ajax: "{{ route('superadmin.p3.ajax', [$jadwal, $pd]) }}",
                     dataSrc: 'data',
                     columnDefs: [{
                             data: 'name',
@@ -91,13 +100,17 @@
                             targets: 3
                         },
                         {
-                            data: 'satker',
+                            data: 'pd',
                             targets: 4
+                        },
+                        {
+                            data: 'satker',
+                            targets: 5
                         },
                         {
                             data: 'tanya1',
                             // className: "text-end",
-                            targets: 5,
+                            targets: 6,
                             render: function(data, type, row) {
                                 let text = "";
                                 if (row.tanya1 !== null && row.tanya2 !== null && row.tanya3 !== null) {
@@ -124,10 +137,10 @@
                         },
                         {
                             data: 'pernyataan',
-                            targets: 6,
+                            targets: 7,
                             render: function(data, type, row) {
                                 let text = "";
-                                let url = "../../pernyataan/pdf/{{ $jadwal->id }}/" + row.id;
+                                let url = "../../../pernyataan/pdf/{{ $jadwal->id }}/" + row.id;
                                 if (row.pernyataan === 1) {
                                     text +=
                                         '<i class="mdi mdi-check btn btn-xsm btn-success pe-none fst-normal"> sudah  </i>';
@@ -143,12 +156,12 @@
                         }
                     ],
                     order: [
-                        [6, 'desc']
+                        [0, 'asc']
                     ],
                     lengthChange: !1,
                     filter: !1,
                     searching: 1,
-                    pageLength: 20,
+                    pageLength: 10,
                     info: !0,
                     buttons: [{
                         @notmobile()
@@ -158,7 +171,7 @@
                         className: 'mb-1',
                         @endmobile()
                         action: function(e, dt, node, config) {
-                            window.open("{{ route('superadmin.pernyataan.terakhir') }}",
+                            window.open("{{ route('superadmin.pernyataan.jadwal', $id) }}",
                                 "_self");
                         }
                     }, {
@@ -167,9 +180,9 @@
                         text: '<i class="mdi mdi-microsoft-excel"></i>',
                         className: 'mb-1',
                         @endmobile()
-                        title: 'Data Pernyataan - Tahun {{ $jadwal->tahun }} Semester {{ $jadwal->semester }} - {{ $pd }}',
+                        title: 'Data Pernyataan - Menerima Gratifikasi dan Belum Melapor - Tahun {{ $jadwal->tahun }} Semester {{ $jadwal->semester }}',
                         exportOptions: {
-                            columns: [0, 1, 2, 3, 4, 5, 6, 7]
+                            columns: [0, 1, 2, 3, 4, 5, 6]
                         }
                     }, {
                         extend: 'colvis',
@@ -181,6 +194,7 @@
                         @endmobile()
                     }],
                     language: {
+                        lengthMenu: "Menampilkan _MENU_ pegawai per halaman",
                         @desktop()
                         search: "Pencarian",
                         @enddesktop()

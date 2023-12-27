@@ -111,10 +111,12 @@ Route::post('/superadmin/bantuan/update', [SuperadminBantuanController::class, '
 Route::post('/superadmin/bantuan/delete/', [SuperadminBantuanController::class, 'delete'])->name('superadmin.help.delete');
 Route::get('/superadmin/bantuan/up/{a}/{b}/{c}/{d}', [SuperadminBantuanController::class, 'up'])->name('superadmin.help.up');
 
+Route::get('/superadmin/pernyataan3/{id}', [SuperadminPernyataanController::class, 'pernyataan3'])->name('superadmin.pernyataan.tiga');
+Route::get('/superadmin/p3ajax/{id}/{pd}', [SuperadminPernyataanController::class, 'p3Ajax'])->name('superadmin.p3.ajax');
 
-require __DIR__.'/auth.php';
-require __DIR__.'/user.php';
-require __DIR__.'/admin.php';
+require __DIR__ . '/auth.php';
+require __DIR__ . '/user.php';
+require __DIR__ . '/admin.php';
 
 // Route::fallback(function () {
 //     // abort(404);

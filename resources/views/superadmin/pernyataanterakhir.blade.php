@@ -10,7 +10,6 @@
             .file-custom:focus {
                 outline: none;
             }
-
         </style>
     </x-slot>
 
@@ -65,86 +64,89 @@
                                 <tbody>
                                     @php($i = 1)
 
-                                        @foreach ($rekap as $d)
-                                            <tr>
-                                                <td class="text-center">{{ $i++ }}</td>
-                                                <td>
-                                                    @desktop() {{ $d->pd }} @elsedesktop()
-                                                    {{ str_replace('Dinas', 'Din.', str_replace('Kecamatan', 'Kec.', str_replace('Bagian', 'Bag.', $d->pd))) }}
-                                                    @enddesktop()
-                                                </td>
-                                                <td class="text-center">
-                                                    {{ $d->jumlah }}
-                                                </td>
-                                                <td class="text-center">
-                                                    {{ $d->total }}
-                                                </td>
-                                                <td class="text-center">
-                                                    {{ round(($d->jumlah / $d->total) * 100, 1) }}%
-                                                </td>
-                                                <td class="text-center">
-                                                    {{ $d->t2 }}
-                                                </td>
-                                                <td class="text-center">
-                                                    {{ $d->t3 }}
-                                                </td>
-                                                <td class="text-center">
-                                                    <a href="{{ route('superadmin.pernyataan.terakhir.pd', [$d->pd]) }}"
-                                                        class="btn btn-info btn-xsm">
-                                                        <i class="mdi mdi-eye"></i> @notmobile() Lihat @endnotmobile()
+                                    @foreach ($rekap as $d)
+                                        <tr>
+                                            <td class="text-center">{{ $i++ }}</td>
+                                            <td>
+                                                @desktop() {{ $d->pd }} @elsedesktop()
+                                                {{ str_replace('Dinas', 'Din.', str_replace('Kecamatan', 'Kec.', str_replace('Bagian', 'Bag.', $d->pd))) }}
+                                                @enddesktop()
+                                            </td>
+                                            <td class="text-center">
+                                                {{ $d->jumlah }}
+                                            </td>
+                                            <td class="text-center">
+                                                {{ $d->total }}
+                                            </td>
+                                            <td class="text-center">
+                                                {{ round(($d->jumlah / $d->total) * 100, 1) }}%
+                                            </td>
+                                            <td class="text-center">
+                                                {{ $d->t2 }}
+                                            </td>
+                                            <td class="text-center">
+                                                {{ $d->t3 }}
+                                            </td>
+                                            <td class="text-center">
+                                                <a href="{{ route('superadmin.pernyataan.terakhir.pd', [$d->pd]) }}"
+                                                    class="btn btn-info btn-xsm">
+                                                    <i class="mdi mdi-eye"></i> @notmobile() Lihat @endnotmobile()
 
-                                                    </a>
-                                                </td>
-                                            </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                                <div>
-                                    <hr>Keterangan : <br>
-                                    P#1 : Jumlah pegawai yang MENERIMA gratifikasi dan SUDAH melaporkan ke UPG/KPK<br>
-                                    P#2 : Jumlah pegawai yang MENERIMA gratifikasi dan BELUM melaporkan ke UPG/KPK<br>
-                                </div>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                            <div>
+                                <hr>Keterangan : <br>
+                                P#1 : Jumlah pegawai yang MENERIMA gratifikasi dan SUDAH melaporkan ke UPG/KPK<br>
+                                P#2 : Jumlah pegawai yang MENERIMA gratifikasi dan BELUM melaporkan ke UPG/KPK<br>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
 
 
 
-        </x-slot>
+    </x-slot>
 
-        <x-slot name="script">
-            <script>
-                $(document).ready(function() {
-                    "use strict";
-                    var a = $("#datatable-buttons").DataTable({
-                        @mobile()
-                        columnDefs: [{
-                            targets: 1,
-                            render: function(data, type, row) {
-                                return data.length > 20 ?
-                                    data.substr(0, 20) + '…' :
-                                    data;
-                            }
-                        }],
-                        @endmobile()
-                        // buttons: [{
-                        //     text: 'Jumlah pegawai saat ini :  pegawai',
-                        //     className: 'btn btn-light pe-none',
-                        //     // action: function(e, dt, node, config) {
-                        //     //     window.open("https://www.w3schools.com", "_self");
-                        //     // }
-                        // }],
+    <x-slot name="script">
+        <script>
+            $(document).ready(function() {
+                "use strict";
+                var a = $("#datatable-buttons").DataTable({
+                    @mobile()
+                    columnDefs: [{
+                        targets: 1,
+                        render: function(data, type, row) {
+                            return data.length > 20 ?
+                                data.substr(0, 20) + '…' :
+                                data;
+                        }
+                    }],
+                    @endmobile()
+                    // buttons: [{
+                    //     text: 'Jumlah pegawai saat ini :  pegawai',
+                    //     className: 'btn btn-light pe-none',
+                    //     // action: function(e, dt, node, config) {
+                    //     //     window.open("https://www.w3schools.com", "_self");
+                    //     // }
+                    // }],
 
-                        lengthChange: !1,
-                        filter: 1,
-                        // searching: 1,
-                        pageLength: 10,
-                        // bPaginate: !1,
-                        // filter: !1,
-                        info: 1,
-                        buttons: [{
+                    lengthChange: !1,
+                    filter: 1,
+                    // searching: 1,
+                    pageLength: 10,
+                    // bPaginate: !1,
+                    // filter: !1,
+                    info: 1,
+                    order: [
+                        [6, "desc"]
+                    ],
+                    buttons: [{
                             @desktop()
                             text: '<i class="uil-arrow-left"></i> Kembali',
                             @enddesktop()
@@ -163,7 +165,7 @@
                             @endmobile()
                             title: 'Data Pernyataan - Tahun {{ $jadwal->tahun }} Semester {{ $jadwal->semester }}',
                             exportOptions: {
-                                columns: [0, 1, 2, 3, 4]
+                                columns: [0, 1, 2, 3, 4, 5, 6]
                             }
                         }, {
                             extend: 'excel',
@@ -184,42 +186,57 @@
                             text: '<i class="mdi mdi-table-eye"></i>',
                             className: 'mb-1',
                             @endmobile()
-                        }],
-                        language: {
-                            // lengthMenu: "Menampilkan _MENU_ pegawai per halaman",
-                            @desktop()
-                            search: "Pencarian",
-                            @enddesktop()
-                            @mobile()
-                            search: "",
-                            searchPlaceholder: "Pencarian",
-                            @endmobile()
-                            info: "Menampilkan data ke _START_ sampai _END_ dari _TOTAL_ total data",
-                            paginate: {
-                                previous: "<i class='mdi mdi-chevron-left'>",
-                                next: "<i class='mdi mdi-chevron-right'>"
+                        }
+                        @if ($count > 0)
+                            , {
+                                @desktop()
+                                text: 'Belum Melaporkan Gratifikasi',
+                                className: 'ms-1 btn-danger',
+                                @enddesktop()
+                                @mobile()
+                                text: '<i class="uil-arrow-left"></i>',
+                                className: 'mb-1 btn-danger',
+                                @endmobile()
+                                action: function(e, dt, node, config) {
+                                    window.open("{{ route('superadmin.pernyataan.tiga', $jadwal->id) }}", "_self");
+                                }
                             }
-                        },
-                        drawCallback: function() {
-                            $(".dataTables_paginate > .pagination").addClass("pagination-rounded");
-                            $(".dataTables_paginate > .pagination > .active > .page-link ").addClass(
-                                "bg-secondary");
+                        @endif
+                    ],
+                    language: {
+                        // lengthMenu: "Menampilkan _MENU_ pegawai per halaman",
+                        @desktop()
+                        search: "Pencarian",
+                        @enddesktop()
+                        @mobile()
+                        search: "",
+                        searchPlaceholder: "Pencarian",
+                        @endmobile()
+                        info: "Menampilkan data ke _START_ sampai _END_ dari _TOTAL_ total data",
+                        paginate: {
+                            previous: "<i class='mdi mdi-chevron-left'>",
+                            next: "<i class='mdi mdi-chevron-right'>"
                         }
-                    });
-                    a.buttons().container().appendTo("#datatable-buttons_wrapper .col-md-6:eq(0)"), $(
-                        "#alternative-page-datatable").DataTable({
-                        pagingType: "full_numbers",
-                        drawCallback: function() {
-                            $(".dataTables_paginate > .pagination").addClass("pagination-rounded")
-                        }
-                    })
+                    },
+                    drawCallback: function() {
+                        $(".dataTables_paginate > .pagination").addClass("pagination-rounded");
+                        $(".dataTables_paginate > .pagination > .active > .page-link ").addClass(
+                            "bg-secondary");
+                    }
                 });
+                a.buttons().container().appendTo("#datatable-buttons_wrapper .col-md-6:eq(0)"), $(
+                    "#alternative-page-datatable").DataTable({
+                    pagingType: "full_numbers",
+                    drawCallback: function() {
+                        $(".dataTables_paginate > .pagination").addClass("pagination-rounded")
+                    }
+                })
+            });
+        </script>
 
-            </script>
 
 
-
-            {{-- <script>
+        {{-- <script>
                 function autocomplete(inp, arr) {
                     var currentFocus;
                     inp.addEventListener("input", function(e) {
@@ -311,9 +328,9 @@
 
             </script> --}}
 
-            {{-- AUTOCOMPLETE --}}
+        {{-- AUTOCOMPLETE --}}
 
-            {{-- <script>
+        {{-- <script>
                 $('.delete_alert').on('click', function(e) {
                     e.preventDefault();
                     var form = $(this).parents('form');
@@ -337,18 +354,17 @@
                 });
             </script> --}}
 
-            @if ($errors->any())
-                <script type="text/javascript">
-                    Swal.fire({
-                        title: 'Ops...',
-                        html: 'Ada sesuatu yang salah.<br>Pastikan form sudah terisi semua dengan benar.',
-                        icon: 'error',
-                        confirmButtonText: 'OK',
-                        confirmButtonColor: '#fa5c7c'
-                    })
+        @if ($errors->any())
+            <script type="text/javascript">
+                Swal.fire({
+                    title: 'Ops...',
+                    html: 'Ada sesuatu yang salah.<br>Pastikan form sudah terisi semua dengan benar.',
+                    icon: 'error',
+                    confirmButtonText: 'OK',
+                    confirmButtonColor: '#fa5c7c'
+                })
+            </script>
+        @endif
+    </x-slot>
 
-                </script>
-            @endif
-        </x-slot>
-
-    </x-superadminwide-layout>
+</x-superadminwide-layout>

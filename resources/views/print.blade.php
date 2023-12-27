@@ -35,7 +35,6 @@
         .tabel>tbody>tr>td {
             border: solid 1px #000;
         }
-
     </style>
 </head>
 
