@@ -57,8 +57,12 @@
                                         <tr>
                                             <td>{{ $i + 1 }}</td>
                                             <td>{{ $d->tahun }} /
-                                                @desktop Semester @enddesktop
-                                                @mobile smt @endmobile
+                                                @desktop
+                                                    Semester
+                                                @enddesktop
+                                                @mobile
+                                                    smt
+                                                @endmobile
                                                 {{ $d->semester }}
                                             </td>
                                             <td>
@@ -148,10 +152,10 @@
                                         <div class="form-floating">
                                             <select class="form-select text-dark" name="semester" required>
 
-                                                <option value="1" @if (old('semester') != null && old('pangkat') == 1) selected @elseif (old('pangkat') == null && $aktif->semester_baru == 1 ) selected @endif>
+                                                <option value="1" @if (old('semester') != null && old('pangkat') == 1) selected @elseif (old('pangkat') == null && $aktif->semester_baru == 1) selected @endif>
                                                     1 (satu)
                                                 </option>
-                                                <option value="2" @if (old('semester') != null && old('pangkat') == 2) selected @elseif (old('pangkat') == null && $aktif->semester_baru == 2 ) selected @endif>
+                                                <option value="2" @if (old('semester') != null && old('pangkat') == 2) selected @elseif (old('pangkat') == null && $aktif->semester_baru == 2) selected @endif>
                                                     2 (dua)
                                                 </option>
 
@@ -311,7 +315,6 @@
                     }
                 })
             });
-
         </script>
 
         @if ($errors->any())
@@ -319,7 +322,6 @@
                 $(window).on('load', function() {
                     $('#new').modal('show');
                 });
-
             </script>
         @endif
 
@@ -345,7 +347,6 @@
                     }
                 });
             });
-
         </script>
     </x-slot>
 

@@ -83,8 +83,17 @@
                     ajax: "{{ route('superadmin.pernyataan.jadwal.pd.ajax', [$jadwal, $pd]) }}",
                     dataSrc: 'data',
                     columnDefs: [{
-                            data: 'name',
-                            targets: 0
+                           data: 'name',
+                            targets: 0,
+							render: function(data, type, row) {
+                                let text = row.name;
+                                if (row.tanya1 !== null && row.tanya2 !== null && row.tanya3 !== null) {
+                                    if (row.tanya3 === 1) {
+                                        text += '<sup class="bg-danger ms-1 text-white rounded" style="padding:0.1em 0.6em; font-size:0.6rem;"><b>!</b></sup>';
+                                    }
+                                }
+								return text;
+                            }
                         },
                         {
                             data: 'nip',
@@ -151,7 +160,7 @@
                         }
                     ],
                     order: [
-                        [0, 'asc']
+                        [5, 'asc']
                     ],
                     lengthChange: !1,
                     filter: !1,

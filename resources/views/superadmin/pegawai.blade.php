@@ -42,9 +42,13 @@
                                     @foreach ($perangkat as $i => $d)
                                         <tr>
                                             <td>{{ $i + 1 }}</td>
-                                            <td>@desktop() {{ $d->nama }} @elsedesktop()
-                                                {{ str_replace('Dinas', 'Din.', str_replace('Kecamatan', 'Kec.', str_replace('Bagian', 'Bag.', $d->nama))) }}
-                                                @enddesktop() </td>
+                                            <td>
+                                                <a href="{{ route('superadmin.pegawai.pd', $d->nama) }}" class="link-secondary">
+                                                    @desktop() {{ $d->nama }} @elsedesktop()
+                                                    {{ str_replace('Dinas', 'Din.', str_replace('Kecamatan', 'Kec.', str_replace('Bagian', 'Bag.', $d->nama))) }}
+                                                    @enddesktop()
+                                                </a>
+                                            </td>
                                             @mobile() <td>{{ $d->nama }}</td> @endmobile()
                                             <td class="text-center">{{ $d->total }} </td>
                                             <td class="text-center">
@@ -205,7 +209,6 @@
                     .nodes()
                     .attr('data-bs-target', '#add');
             });
-
         </script>
 
         @if ($errors->any())
@@ -213,7 +216,6 @@
                 $(window).on('load', function() {
                     $('#new').modal('show');
                 });
-
             </script>
         @endif
 
@@ -239,7 +241,6 @@
                     }
                 });
             });
-
         </script>
 
         <script>
@@ -262,7 +263,6 @@
                 document.getElementById("nip").required = true;
                 document.getElementById("name").required = false;
             }
-
         </script>
     </x-slot>
 

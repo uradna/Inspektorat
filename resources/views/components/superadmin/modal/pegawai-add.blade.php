@@ -13,51 +13,56 @@
                     action="{{ route('superadmin.pegawai.add') }}">
                     @csrf
 
-                    <div class="row">
-                        <div class="position-relative mb-2 col-md-12">
-                            <div class="form-floating">
-                                <x-input-float :id="__('name')" type="text" required
-                                    value="{{ old('name') ?? '' }}" />
-                                <x-invalid :value=" __('Nama harus diisi')" />
-                                <x-label-float :value="__('Nama Lengkap')" />
+                    @if (isset($pd) && $pd == 'Bupati dan Wakil Bupati')
+                    @else
+                        <div class="row">
+                            <div class="position-relative mb-2 col-md-12">
+                                <div class="form-floating">
+                                    <x-input-float :id="__('name')" type="text" required
+                                        value="{{ old('name') ?? '' }}" />
+                                    <x-invalid :value="__('Nama harus diisi')" />
+                                    <x-label-float :value="__('Nama Lengkap')" />
+                                </div>
+                            </div>
+
+                            <div class="position-relative mb-2 col-md-12">
+                                <div class="form-floating">
+                                    <x-input-float :id="__('nip')" type="text" pattern="[0-9]{18}" required
+                                        value="{{ old('nip') ?? '' }}" />
+                                    <x-invalid :value="__('NIP harus diisi dengan benar, 18 digit angka')" />
+                                    <x-label-float :value="__('NIP')" />
+                                </div>
+                            </div>
+
+                            <div class="position-relative mb-2 col-md-12 form-floating">
+                                <div class="form-floating">
+                                    @if (!empty($pd))
+                                        <x-input-float :id="__('pd')" type="text" list="listPD" autocomplete="off"
+                                            value="{{ $pd }}" readonly />
+                                    @else
+                                        <x-input-float :id="__('pd')" type="text" list="listPD" autocomplete="off"
+                                            value="{{ old('pd') }}" />
+                                    @endif
+
+                                    <x-invalid :value="__('Pilih perangkat daerah')" />
+                                    <x-label-float :value="__('Perangkat daerah')" />
+                                    <datalist id="listPD">
+                                        @foreach (getPerangkat() as $n => $d)
+                                            <option value="{{ $d->nama }}"></option>
+                                        @endforeach
+                                    </datalist>
+                                </div>
+                            </div>
+                            <div class="position-relative mb-2 col-md-12">
+                                <small class="text-muted">
+                                    {{-- Nama dan NIP wajib di isi.<br> --}}
+                                    Password = NIP
+                                </small>
                             </div>
                         </div>
+                    @endif
 
-                        <div class="position-relative mb-2 col-md-12">
-                            <div class="form-floating">
-                                <x-input-float :id="__('nip')" type="text" pattern="[0-9]{18}" required
-                                    value="{{ old('nip') ?? '' }}" />
-                                <x-invalid :value=" __('NIP harus diisi dengan benar, 18 digit angka')" />
-                                <x-label-float :value="__('NIP')" />
-                            </div>
-                        </div>
 
-                        <div class="position-relative mb-2 col-md-12 form-floating">
-                            <div class="form-floating">
-                                @if (!empty($pd))
-                                    <x-input-float :id="__('pd')" type="text" list="listPD" autocomplete="off"
-                                        value="{{ $pd }}" readonly />
-                                @else
-                                    <x-input-float :id="__('pd')" type="text" list="listPD" autocomplete="off"
-                                        value="{{ old('pd') }}" />
-                                @endif
-
-                                <x-invalid :value="__('Pilih perangkat daerah')" />
-                                <x-label-float :value="__('Perangkat daerah')" />
-                                <datalist id="listPD">
-                                    @foreach (getPerangkat() as $n => $d)
-                                        <option value="{{ $d->nama }}"></option>
-                                    @endforeach
-                                </datalist>
-                            </div>
-                        </div>
-                        <div class="position-relative mb-2 col-md-12">
-                            <small class="text-muted">
-                                {{-- Nama dan NIP wajib di isi.<br> --}}
-                                Password = NIP
-                            </small>
-                        </div>
-                    </div>
 
 
 

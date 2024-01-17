@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+        Db::table('perangkat_daerahs')->insert(['nama' => 'Bupati dan Wakil Bupati']);
         Db::table('perangkat_daerahs')->insert(['nama' => 'Badan Kepegawaian Dan Pengembangan Sumber Daya Manusia']);
         Db::table('perangkat_daerahs')->insert(['nama' => 'Badan Kesatuan Bangsa Dan Politik']);
         Db::table('perangkat_daerahs')->insert(['nama' => 'Badan Penanggulangan Bencana Daerah']);
@@ -87,7 +88,7 @@ class DatabaseSeeder extends Seeder
         Db::table('jenis_gratifikasis')->insert(['nama' => 'Pengobatan Cuma-cuma']);
         Db::table('jenis_gratifikasis')->insert(['nama' => 'Fasilitas']);
         Db::table('jenis_gratifikasis')->insert(['nama' => 'Lain-lain']);
-        
+
         DB::table('users')->insert([
             'name' => 'Andaru Krido Utomo',
             'email' => 'andaru@ponorogo.go.id',
@@ -98,6 +99,29 @@ class DatabaseSeeder extends Seeder
             'jabatan' => 'Pranata Komputer Terampil',
             'pd' => 'Dinas Komunikasi, Informatika Dan Statistik',
             'satker' => 'Bidang Aplikasi dan Informatika',
+            'password' => Hash::make('password'),
+            'level' => '0'
+        ]);
+
+        DB::table('users')->insert([
+            'name' => 'Sugiri Sancoko',
+            'email' => 'sugirisancoko@ponorogo.go.id',
+            'username' => 'bupati_ponorogo',
+            'pangkat' => '-',
+            'jabatan' => 'Bupati',
+            'pd' => 'Bupati dan Wakil Bupati',
+            'satker' => '-',
+            'password' => Hash::make('password'),
+            'level' => '0'
+        ]);
+        DB::table('users')->insert([
+            'name' => 'Lisdyarita',
+            'email' => 'lisdyarita@ponorogo.go.id',
+            'username' => 'wakilbupati_ponorogo',
+            'pangkat' => '-',
+            'jabatan' => 'Wakil Bupati',
+            'pd' => 'Bupati dan Wakil Bupati',
+            'satker' => '-',
             'password' => Hash::make('password'),
             'level' => '0'
         ]);
@@ -121,105 +145,105 @@ class DatabaseSeeder extends Seeder
             'level' => '2'
         ]);
 
-        DB::table('jadwals')->insert([
-            'tahun' => '2021',
-            'semester' => '1',
-            'akhir' => '2021-05-18',
-            'created_at' => '2021-02-20 01:28:05',
-            'status' => '0'
-        ]);
+        // DB::table('jadwals')->insert([
+        //     'tahun' => '2021',
+        //     'semester' => '1',
+        //     'akhir' => '2021-05-18',
+        //     'created_at' => '2021-02-20 01:28:05',
+        //     'status' => '0'
+        // ]);
 
-        DB::table('jadwals')->insert([
-            'tahun' => '2021',
-            'semester' => '2',
-            'akhir' => '2021-12-25',
-            'created_at' => '2021-11-20 01:28:05',
-            'status' => '0'
-        ]);
+        // DB::table('jadwals')->insert([
+        //     'tahun' => '2021',
+        //     'semester' => '2',
+        //     'akhir' => '2021-12-25',
+        //     'created_at' => '2021-11-20 01:28:05',
+        //     'status' => '0'
+        // ]);
 
-        DB::table('jadwals')->insert([
-            'tahun' => '2022',
-            'semester' => '1',
-            'akhir' => '2022-04-25',
-            'created_at' => '2022-02-20 01:28:05',
-            'status' => '0'
-        ]);
+        // DB::table('jadwals')->insert([
+        //     'tahun' => '2022',
+        //     'semester' => '1',
+        //     'akhir' => '2022-04-25',
+        //     'created_at' => '2022-02-20 01:28:05',
+        //     'status' => '0'
+        // ]);
 
-        DB::table('jadwals')->insert([
-            'tahun' => '2022',
-            'semester' => '2',
-            'akhir' => '2022-11-05',
-            'created_at' => '2022-11-20 01:28:05',
-            'status' => '0'
-        ]);
+        // DB::table('jadwals')->insert([
+        //     'tahun' => '2022',
+        //     'semester' => '2',
+        //     'akhir' => '2022-11-05',
+        //     'created_at' => '2022-11-20 01:28:05',
+        //     'status' => '0'
+        // ]);
 
-        DB::table('jadwals')->insert([
-            'tahun' => '2023',
-            'semester' => '1',
-            'akhir' => '2023-03-25',
-            'created_at' => '2023-02-20 01:28:05',
-            'status' => '1'
-        ]);
+        // DB::table('jadwals')->insert([
+        //     'tahun' => '2023',
+        //     'semester' => '1',
+        //     'akhir' => '2023-03-25',
+        //     'created_at' => '2023-02-20 01:28:05',
+        //     'status' => '1'
+        // ]);
 
-        DB::table('lapors')->insert([
-            'user_id' => '1',
-            'pd' => 'Dinas Komunikasi, Informatika Dan Statistik',
-            'satker' => 'Bidang Aplikasi Informatika',
-            'jenis' => 'Barang',
-            'bentuk' => 'Headset',
-            'nilai' => '500000',
-            'tanggal' => '2023-1-25',
-            'pemberi' => 'Pringgo',
-            'hubungan' => 'Teman kerja',
-            'alamat' => 'Slahung',
-            'alasan' => 'Membantu ujian TOELF',
-            'created_at' => '2023-02-23 09:45:05'
-        ]);
+        // DB::table('lapors')->insert([
+        //     'user_id' => '1',
+        //     'pd' => 'Dinas Komunikasi, Informatika Dan Statistik',
+        //     'satker' => 'Bidang Aplikasi Informatika',
+        //     'jenis' => 'Barang',
+        //     'bentuk' => 'Headset',
+        //     'nilai' => '500000',
+        //     'tanggal' => '2023-1-25',
+        //     'pemberi' => 'Pringgo',
+        //     'hubungan' => 'Teman kerja',
+        //     'alamat' => 'Slahung',
+        //     'alasan' => 'Membantu ujian TOELF',
+        //     'created_at' => '2023-02-23 09:45:05'
+        // ]);
 
-        DB::table('lapors')->insert([
-            'user_id' => '5391',
-            'pd' => 'Dinas Komunikasi, Informatika Dan Statistik',
-            'satker' => 'Bidang PIKP',
-            'jenis' => 'Uang',
-            'bentuk' => 'Uang',
-            'nilai' => '50000',
-            'tanggal' => '2023-1-25',
-            'pemberi' => 'Agung',
-            'hubungan' => 'Masyarakat',
-            'alamat' => 'Slahung',
-            'alasan' => 'Menerima laporan',
-            'created_at' => '2023-02-23 09:45:05'
-        ]);
+        // DB::table('lapors')->insert([
+        //     'user_id' => '5391',
+        //     'pd' => 'Dinas Komunikasi, Informatika Dan Statistik',
+        //     'satker' => 'Bidang PIKP',
+        //     'jenis' => 'Uang',
+        //     'bentuk' => 'Uang',
+        //     'nilai' => '50000',
+        //     'tanggal' => '2023-1-25',
+        //     'pemberi' => 'Agung',
+        //     'hubungan' => 'Masyarakat',
+        //     'alamat' => 'Slahung',
+        //     'alasan' => 'Menerima laporan',
+        //     'created_at' => '2023-02-23 09:45:05'
+        // ]);
 
-        DB::table('lapors')->insert([
-            'user_id' => '575',
-            'pd' => 'Dinas Komunikasi, Informatika Dan Statistik',
-            'satker' => 'Sekretariat Kominfo',
-            'jenis' => 'Barang',
-            'bentuk' => 'Makanan',
-            'nilai' => '10000',
-            'tanggal' => '2023-1-25',
-            'pemberi' => 'Yuni',
-            'hubungan' => 'Tetangga',
-            'alamat' => 'Ponorogo',
-            'alasan' => 'Ndak tahu',
-            'created_at' => '2023-02-23 09:45:05'
-        ]);
+        // DB::table('lapors')->insert([
+        //     'user_id' => '575',
+        //     'pd' => 'Dinas Komunikasi, Informatika Dan Statistik',
+        //     'satker' => 'Sekretariat Kominfo',
+        //     'jenis' => 'Barang',
+        //     'bentuk' => 'Makanan',
+        //     'nilai' => '10000',
+        //     'tanggal' => '2023-1-25',
+        //     'pemberi' => 'Yuni',
+        //     'hubungan' => 'Tetangga',
+        //     'alamat' => 'Ponorogo',
+        //     'alasan' => 'Ndak tahu',
+        //     'created_at' => '2023-02-23 09:45:05'
+        // ]);
 
-        DB::table('lapors')->insert([
-            'user_id' => '2486',
-            'pd' => 'Dinas Perhubungan',
-            'satker' => 'Sekretariat Dinas',
-            'jenis' => 'Barang',
-            'bentuk' => 'Makanan',
-            'nilai' => '15000',
-            'tanggal' => '2023-1-25',
-            'pemberi' => 'Pak Roto',
-            'hubungan' => 'Teman kerja',
-            'alamat' => 'Madiun',
-            'alasan' => 'Membuatkan aplikasi untuk diklat PIM',
-            'created_at' => '2023-02-23 09:45:05'
-        ]);
+        // DB::table('lapors')->insert([
+        //     'user_id' => '2486',
+        //     'pd' => 'Dinas Perhubungan',
+        //     'satker' => 'Sekretariat Dinas',
+        //     'jenis' => 'Barang',
+        //     'bentuk' => 'Makanan',
+        //     'nilai' => '15000',
+        //     'tanggal' => '2023-1-25',
+        //     'pemberi' => 'Pak Roto',
+        //     'hubungan' => 'Teman kerja',
+        //     'alamat' => 'Madiun',
+        //     'alasan' => 'Membuatkan aplikasi untuk diklat PIM',
+        //     'created_at' => '2023-02-23 09:45:05'
+        // ]);
 
         DB::table('bantuans')->insert([
             'for' => 'user',
@@ -280,153 +304,153 @@ class DatabaseSeeder extends Seeder
         DB::table('pangkats')->insert(['nama' => 'IV/C']);
         DB::table('pangkats')->insert(['nama' => 'IV/D']);
         DB::table('pangkats')->insert(['nama' => 'IV/E']);
-        
-        require __DIR__.'/pegawai.php';
-        
-        DB::table('hapuses')->insert([
-            'user_id' => '5210',
-            'pd' => 'Dinas Komunikasi, Informatika Dan Statistik',
-            'alasan' => 'pensiun',
-            'file' => '20230410062829-196508121992021004-Pri.pdf',
-            'status' => '0',
-            'created_at' => '2023-02-23 09:45:05',
-            'feedback' => null
-        ]);
 
-        DB::table('hapuses')->insert([
-            'user_id' => '703',
-            'pd' => 'Dinas Komunikasi, Informatika Dan Statistik',
-            'alasan' => 'pensiun',
-            'file' => '20230410055240-196509271993022001-Wiwik.pdf',
-            'status' => '0',
-            'created_at' => '2023-02-23 09:45:05',
-            'feedback' => null
-        ]);
+        require __DIR__ . '/pegawai.php';
 
-        DB::table('pernyataans')->insert([
-            'user_id' => '1',
-            'jadwal_id' => '5',
-            'email' => 'andaru@ponorogo.go.id',
-            'phone' => '081225181060',
-            'pangkat' => 'II/C',
-            'jabatan' => 'Pranata Komputer Terampil',
-            'pd' => 'Dinas Komunikasi, Informatika Dan Statistik',
-            'satker' => 'Bidang Aplikasi dan Informatika',
-            'tanya1' => '1',
-            'tanya2' => '0',
-            'tanya3' => '0',
-            'created_at' => '2023-02-23 09:45:05'
-        ]);
+        // DB::table('hapuses')->insert([
+        //     'user_id' => '5210',
+        //     'pd' => 'Dinas Komunikasi, Informatika Dan Statistik',
+        //     'alasan' => 'pensiun',
+        //     'file' => '20230410062829-196508121992021004-Pri.pdf',
+        //     'status' => '0',
+        //     'created_at' => '2023-02-23 09:45:05',
+        //     'feedback' => null
+        // ]);
 
-        DB::table('pernyataans')->insert([
-            'user_id' => '1',
-            'jadwal_id' => '4',
-            'email' => 'andaru@ponorogo.go.id',
-            'phone' => '081225181060',
-            'pangkat' => 'II/C',
-            'jabatan' => 'Pranata Komputer Terampil',
-            'pd' => 'Dinas Komunikasi, Informatika Dan Statistik',
-            'satker' => 'Bidang Aplikasi dan Informatika',
-            'tanya1' => '1',
-            'tanya2' => '0',
-            'tanya3' => '0',
-            'created_at' => '2023-02-23 09:45:05'
-        ]);
+        // DB::table('hapuses')->insert([
+        //     'user_id' => '703',
+        //     'pd' => 'Dinas Komunikasi, Informatika Dan Statistik',
+        //     'alasan' => 'pensiun',
+        //     'file' => '20230410055240-196509271993022001-Wiwik.pdf',
+        //     'status' => '0',
+        //     'created_at' => '2023-02-23 09:45:05',
+        //     'feedback' => null
+        // ]);
 
-        DB::table('pernyataans')->insert([
-            'user_id' => '711',
-            'jadwal_id' => '5',
-            'email' => 'jonis@ponorogo.go.id', 'phone' => '081368668767', 'pangkat' => 'III/C', 'jabatan' => 'Fungsional', 'pd' => 'Dinas Komunikasi, Informatika Dan Statistik', 'satker' => 'Bidang Aplikasi Dan Informatika - Seksi Infrastruktur Dan Teknologi',
-            'tanya1' => '1',
-            'tanya2' => '0',
-            'tanya3' => '0',
-            'created_at' => '2023-02-23 09:45:05'
-        ]);
+        // DB::table('pernyataans')->insert([
+        //     'user_id' => '1',
+        //     'jadwal_id' => '5',
+        //     'email' => 'andaru@ponorogo.go.id',
+        //     'phone' => '081225181060',
+        //     'pangkat' => 'II/C',
+        //     'jabatan' => 'Pranata Komputer Terampil',
+        //     'pd' => 'Dinas Komunikasi, Informatika Dan Statistik',
+        //     'satker' => 'Bidang Aplikasi dan Informatika',
+        //     'tanya1' => '1',
+        //     'tanya2' => '0',
+        //     'tanya3' => '0',
+        //     'created_at' => '2023-02-23 09:45:05'
+        // ]);
 
-        DB::table('pernyataans')->insert([
-            'user_id' => '711',
-            'jadwal_id' => '4',
-            'email' => 'jonis@ponorogo.go.id', 'phone' => '081368668767', 'pangkat' => 'III/C', 'jabatan' => 'Fungsional', 'pd' => 'Dinas Komunikasi, Informatika Dan Statistik', 'satker' => 'Bidang Aplikasi Dan Informatika - Seksi Infrastruktur Dan Teknologi',
-            'tanya1' => '1',
-            'tanya2' => '0',
-            'tanya3' => '0',
-            'created_at' => '2023-02-23 09:45:05'
-        ]);
+        // DB::table('pernyataans')->insert([
+        //     'user_id' => '1',
+        //     'jadwal_id' => '4',
+        //     'email' => 'andaru@ponorogo.go.id',
+        //     'phone' => '081225181060',
+        //     'pangkat' => 'II/C',
+        //     'jabatan' => 'Pranata Komputer Terampil',
+        //     'pd' => 'Dinas Komunikasi, Informatika Dan Statistik',
+        //     'satker' => 'Bidang Aplikasi dan Informatika',
+        //     'tanya1' => '1',
+        //     'tanya2' => '0',
+        //     'tanya3' => '0',
+        //     'created_at' => '2023-02-23 09:45:05'
+        // ]);
 
-        DB::table('pernyataans')->insert([
-            'user_id' => '714',
-            'jadwal_id' => '4',
-            'email' => 'handikominfo@gmail.com', 'phone' => '081225181060', 'pangkat' => 'III/C', 'jabatan' => 'Pranata Komputer Ahli Muda', 'pd' => 'Dinas Komunikasi, Informatika Dan Statistik', 'satker' => 'Bidang Aplikasi Dan Informatika - Seksi Aplikasi Dan Pengembangan Sdm Tik',
-            'tanya1' => '1',
-            'tanya2' => '0',
-            'tanya3' => '0',
-            'created_at' => '2023-02-23 09:45:05'
-        ]);
+        // DB::table('pernyataans')->insert([
+        //     'user_id' => '711',
+        //     'jadwal_id' => '5',
+        //     'email' => 'jonis@ponorogo.go.id', 'phone' => '081368668767', 'pangkat' => 'III/C', 'jabatan' => 'Fungsional', 'pd' => 'Dinas Komunikasi, Informatika Dan Statistik', 'satker' => 'Bidang Aplikasi Dan Informatika - Seksi Infrastruktur Dan Teknologi',
+        //     'tanya1' => '1',
+        //     'tanya2' => '0',
+        //     'tanya3' => '0',
+        //     'created_at' => '2023-02-23 09:45:05'
+        // ]);
 
-        DB::table('pernyataans')->insert([
-            'user_id' => '714',
-            'jadwal_id' => '3',
-            'email' => 'handikominfo@gmail.com', 'phone' => '081225181060', 'pangkat' => 'III/C', 'jabatan' => 'Pranata Komputer Ahli Muda', 'pd' => 'Dinas Komunikasi, Informatika Dan Statistik', 'satker' => 'Bidang Aplikasi Dan Informatika - Seksi Aplikasi Dan Pengembangan Sdm Tik',
-            'tanya1' => '1',
-            'tanya2' => '0',
-            'tanya3' => '0',
-            'created_at' => '2023-02-23 09:45:05'
-        ]);
+        // DB::table('pernyataans')->insert([
+        //     'user_id' => '711',
+        //     'jadwal_id' => '4',
+        //     'email' => 'jonis@ponorogo.go.id', 'phone' => '081368668767', 'pangkat' => 'III/C', 'jabatan' => 'Fungsional', 'pd' => 'Dinas Komunikasi, Informatika Dan Statistik', 'satker' => 'Bidang Aplikasi Dan Informatika - Seksi Infrastruktur Dan Teknologi',
+        //     'tanya1' => '1',
+        //     'tanya2' => '0',
+        //     'tanya3' => '0',
+        //     'created_at' => '2023-02-23 09:45:05'
+        // ]);
 
-        DB::table('pernyataans')->insert([
-            'user_id' => '1368',
-            'jadwal_id' => '5',
-            'email' => 'Bambangsuhendro42@gmail.com', 'phone' => '081259993357', 'pangkat' => 'IV/B', 'jabatan' => 'Kepela Dinas', 'pd' => 'Dinas Komunikasi, Informatika Dan Statistik', 'satker' => 'Dinas Komunikasi Informatika Dan Statistik',
-            'tanya1' => '1',
-            'tanya2' => '0',
-            'tanya3' => '0',
-            'created_at' => '2023-02-23 09:45:05'
-        ]);
-        
-        DB::table('pernyataans')->insert([
-            'user_id' => '1368',
-            'jadwal_id' => '4',
-            'email' => 'Bambangsuhendro42@gmail.com', 'phone' => '081259993357', 'pangkat' => 'IV/B', 'jabatan' => 'Kepela Dinas', 'pd' => 'Dinas Komunikasi, Informatika Dan Statistik', 'satker' => 'Dinas Komunikasi Informatika Dan Statistik',
-            'tanya1' => '1',
-            'tanya2' => '0',
-            'tanya3' => '0',
-            'created_at' => '2023-02-23 09:45:05'
-        ]);
+        // DB::table('pernyataans')->insert([
+        //     'user_id' => '714',
+        //     'jadwal_id' => '4',
+        //     'email' => 'handikominfo@gmail.com', 'phone' => '081225181060', 'pangkat' => 'III/C', 'jabatan' => 'Pranata Komputer Ahli Muda', 'pd' => 'Dinas Komunikasi, Informatika Dan Statistik', 'satker' => 'Bidang Aplikasi Dan Informatika - Seksi Aplikasi Dan Pengembangan Sdm Tik',
+        //     'tanya1' => '1',
+        //     'tanya2' => '0',
+        //     'tanya3' => '0',
+        //     'created_at' => '2023-02-23 09:45:05'
+        // ]);
 
-        DB::table('pernyataans')->insert([
-            'user_id' => '1368',
-            'jadwal_id' => '3',
-            'email' => 'Bambangsuhendro42@gmail.com', 'phone' => '081259993357', 'pangkat' => 'IV/B', 'jabatan' => 'Kepela Dinas', 'pd' => 'Dinas Komunikasi, Informatika Dan Statistik', 'satker' => 'Dinas Komunikasi Informatika Dan Statistik',
-            'tanya1' => '1',
-            'tanya2' => '0',
-            'tanya3' => '0',
-            'created_at' => '2023-02-23 09:45:05'
-        ]);
+        // DB::table('pernyataans')->insert([
+        //     'user_id' => '714',
+        //     'jadwal_id' => '3',
+        //     'email' => 'handikominfo@gmail.com', 'phone' => '081225181060', 'pangkat' => 'III/C', 'jabatan' => 'Pranata Komputer Ahli Muda', 'pd' => 'Dinas Komunikasi, Informatika Dan Statistik', 'satker' => 'Bidang Aplikasi Dan Informatika - Seksi Aplikasi Dan Pengembangan Sdm Tik',
+        //     'tanya1' => '1',
+        //     'tanya2' => '0',
+        //     'tanya3' => '0',
+        //     'created_at' => '2023-02-23 09:45:05'
+        // ]);
 
-        $i=1;
-        while ($i<=4) {
-            DB::table('rekapitulasis')->insert([
-                'jadwal_id' => $i,
-                'pd' => 'Dinas Komunikasi, Informatika Dan Statistik',
-                'jumlah' => rand(15, 39),
-                'total' => rand(45, 55),
-            ]);
+        // DB::table('pernyataans')->insert([
+        //     'user_id' => '1368',
+        //     'jadwal_id' => '5',
+        //     'email' => 'Bambangsuhendro42@gmail.com', 'phone' => '081259993357', 'pangkat' => 'IV/B', 'jabatan' => 'Kepela Dinas', 'pd' => 'Dinas Komunikasi, Informatika Dan Statistik', 'satker' => 'Dinas Komunikasi Informatika Dan Statistik',
+        //     'tanya1' => '1',
+        //     'tanya2' => '0',
+        //     'tanya3' => '0',
+        //     'created_at' => '2023-02-23 09:45:05'
+        // ]);
 
-            DB::table('rekapitulasis')->insert([
-                'jadwal_id' => $i,
-                'pd' => 'Dinas Perhubungan',
-                'jumlah' => rand(5, 20),
-                'total' => rand(55, 65),
-            ]);
+        // DB::table('pernyataans')->insert([
+        //     'user_id' => '1368',
+        //     'jadwal_id' => '4',
+        //     'email' => 'Bambangsuhendro42@gmail.com', 'phone' => '081259993357', 'pangkat' => 'IV/B', 'jabatan' => 'Kepela Dinas', 'pd' => 'Dinas Komunikasi, Informatika Dan Statistik', 'satker' => 'Dinas Komunikasi Informatika Dan Statistik',
+        //     'tanya1' => '1',
+        //     'tanya2' => '0',
+        //     'tanya3' => '0',
+        //     'created_at' => '2023-02-23 09:45:05'
+        // ]);
 
-            DB::table('rekapitulasis')->insert([
-                'jadwal_id' => $i,
-                'pd' => 'Dinas Lingkungan Hidup',
-                'jumlah' => rand(10, 25),
-                'total' => rand(35, 45),
-            ]);
-            $i++;
-        }
+        // DB::table('pernyataans')->insert([
+        //     'user_id' => '1368',
+        //     'jadwal_id' => '3',
+        //     'email' => 'Bambangsuhendro42@gmail.com', 'phone' => '081259993357', 'pangkat' => 'IV/B', 'jabatan' => 'Kepela Dinas', 'pd' => 'Dinas Komunikasi, Informatika Dan Statistik', 'satker' => 'Dinas Komunikasi Informatika Dan Statistik',
+        //     'tanya1' => '1',
+        //     'tanya2' => '0',
+        //     'tanya3' => '0',
+        //     'created_at' => '2023-02-23 09:45:05'
+        // ]);
+
+        // $i = 1;
+        // while ($i <= 4) {
+        //     DB::table('rekapitulasis')->insert([
+        //         'jadwal_id' => $i,
+        //         'pd' => 'Dinas Komunikasi, Informatika Dan Statistik',
+        //         'jumlah' => rand(15, 39),
+        //         'total' => rand(45, 55),
+        //     ]);
+
+        //     DB::table('rekapitulasis')->insert([
+        //         'jadwal_id' => $i,
+        //         'pd' => 'Dinas Perhubungan',
+        //         'jumlah' => rand(5, 20),
+        //         'total' => rand(55, 65),
+        //     ]);
+
+        //     DB::table('rekapitulasis')->insert([
+        //         'jadwal_id' => $i,
+        //         'pd' => 'Dinas Lingkungan Hidup',
+        //         'jumlah' => rand(10, 25),
+        //         'total' => rand(35, 45),
+        //     ]);
+        //     $i++;
+        // }
 
         DB::table('banners')->insert([
             'img' => 'big-image.png',
