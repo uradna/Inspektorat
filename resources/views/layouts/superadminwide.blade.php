@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html data-theme="light" @mobile data-layout-mode="fluid" @endmobile @desktop data-layout-mode="fluid" @enddesktop()
+<html data-theme="light" @mobile
+        data-layout-mode="fluid"
+    @endmobile @desktop data-layout-mode="fluid" @enddesktop()
     data-topbar-color="light" data-sidenav-size="condensed" data-sidenav-color="dark" data-layout-position="fixed"
     class="menuitem-active" lang="en">
 
@@ -88,7 +90,6 @@
                 confirmButtonText: 'OK',
                 confirmButtonColor: '#0acf97'
             })
-
         </script>
     @endif
 
@@ -101,7 +102,6 @@
                 confirmButtonText: 'OK',
                 confirmButtonColor: '#fa5c7c'
             })
-
         </script>
     @endif
 </body>

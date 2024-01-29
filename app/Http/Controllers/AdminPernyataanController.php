@@ -22,34 +22,28 @@ class AdminPernyataanController extends Controller
 
     public function index()
     {
-        $pd=Auth::user()->pd;
+        $pd = Auth::user()->pd;
 
         $jadwal_aktif = Jadwal::where('status', 1);
         $aktif = null;
-        if ($jadwal_aktif->count()==1) {
-            $aktif=DB::select('SELECT j.id, j.tahun, j.semester, j.akhir, COUNT(pernyataans.id) AS jumlah
+        if ($jadwal_aktif->count() != 0) {
+            $aktif = DB::select('SELECT j.id, j.tahun, j.semester, j.akhir, COUNT(pernyataans.id) AS jumlah
                                FROM (select * from jadwals where status = 1) j
-                               LEFT JOIN (select * from pernyataans WHERE pernyataans.pd = "'.$pd.'") AS pernyataans ON j.id = pernyataans.jadwal_id  
+                               LEFT JOIN (select * from pernyataans WHERE pernyataans.pd = "' . $pd . '") AS pernyataans ON j.id = pernyataans.jadwal_id  
                                GROUP BY j.id
                                ORDER BY j.id DESC');
-            $aktif=$aktif[0];
-            $aktif->total = getTotalPegawai(Auth::user()->pd);
+            // $aktif = $aktif[0];
+            // dd($aktif[0]);
         }
-
-        $daftar=Rekapitulasi::orderByDesc('id')->where('pd', $pd)->get();
-
-        $status = "Sudah berakhir";
-        if (masihBuka($jadwal_aktif->first()->akhir)) {
-            $status = "Masih berlangsung ";
-        }
-       
-        return view('admin.pernyataan', compact('aktif', 'daftar', 'status'));
+        $total_pegawai = getTotalPegawai(Auth::user()->pd);
+        $daftar = Rekapitulasi::orderByDesc('id')->where('pd', $pd)->get();
+        return view('admin.pernyataan', compact('aktif', 'daftar', 'total_pegawai'));
     }
-    
-    public function latest()
+
+    public function latest($id)
     {
-        $j=Jadwal::where('status', '1')->first();
-        $user=DB::select('SELECT 
+        $j = Jadwal::where('id', $id)->first();
+        $user = DB::select('SELECT 
         users.id, 
         users.name, 
         users.nip, 
@@ -58,27 +52,27 @@ class AdminPernyataanController extends Controller
         users.satker,  
         CASE WHEN pernyataans.id IS NULL THEN "0" ELSE "1" END AS pernyataan
         FROM users
-        LEFT JOIN (select * from pernyataans WHERE pernyataans.jadwal_id = "'.$j->id.'") AS pernyataans ON users.id = pernyataans.user_id
-        WHERE users.pd = "'.Auth::user()->pd.'" AND users.level = "0" AND users.aktif = "1" ORDER BY pernyataan DESC');
+        LEFT JOIN (select * from pernyataans WHERE pernyataans.jadwal_id = "' . $j->id . '") AS pernyataans ON users.id = pernyataans.user_id
+        WHERE users.pd = "' . Auth::user()->pd . '" AND users.level = "0" AND users.aktif = "1" ORDER BY pernyataan DESC');
 
         $tahun = $j->tahun;
         $semester = $j->semester;
         // dd($user);
-        return view('admin.detail', compact('user', 'tahun', 'semester'));
+        return view('admin.terakhir', compact('user', 'tahun', 'semester'));
     }
 
     public function detail($id, $tahun, $semester)
     {
-        $j=Jadwal::where('id', $id)->first();
+        $j = Jadwal::where('id', $id)->first();
         $tahun = $j->tahun;
         $semester = $j->semester;
         return view('admin.detail', compact('tahun', 'semester'));
     }
 
-    public function ajaxLatest()
+    public function ajaxLatest($id)
     {
-        $j=Jadwal::where('status', '1')->first();
-        $user=DB::select('SELECT 
+        $j = Jadwal::where('id', $id)->first();
+        $user = DB::select('SELECT 
         users.id AS DT_RowId,
         users.id, 
         users.name, 
@@ -88,8 +82,8 @@ class AdminPernyataanController extends Controller
         users.satker,  
         CASE WHEN pernyataans.id IS NULL THEN "0" ELSE "1" END AS pernyataan
         FROM users
-        LEFT JOIN (select * from pernyataans WHERE pernyataans.jadwal_id = "'.$j->id.'") AS pernyataans ON users.id = pernyataans.user_id
-        WHERE users.pd = "'.Auth::user()->pd.'" AND users.level = "0" AND users.aktif = "1"
+        LEFT JOIN (select * from pernyataans WHERE pernyataans.jadwal_id = "' . $j->id . '") AS pernyataans ON users.id = pernyataans.user_id
+        WHERE users.pd = "' . Auth::user()->pd . '" AND users.level = "0" AND users.aktif = "1"
         ORDER BY pernyataan DESC');
         $data = collect($user);
         return response()->json([
@@ -99,10 +93,10 @@ class AdminPernyataanController extends Controller
 
     public function ajax($id, $tahun, $semester)
     {
-        $user=DB::select('SELECT u.name, u.nip, u.email, u.phone, u.jabatan, u.satker, "1" as pernyataan 
+        $user = DB::select('SELECT u.name, u.nip, u.email, u.phone, u.jabatan, u.satker, "1" as pernyataan 
                           FROM users u 
-                          INNER JOIN (SELECT * FROM pernyataans WHERE pd = "'.Auth::user()->pd.'") p ON u.id = p.user_id
-                          WHERE p.jadwal_id = "'.$id.'"');
+                          INNER JOIN (SELECT * FROM pernyataans WHERE pd = "' . Auth::user()->pd . '") p ON u.id = p.user_id
+                          WHERE p.jadwal_id = "' . $id . '"');
         $data = collect($user);
         return response()->json([
             'data'    => $data->values()

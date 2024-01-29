@@ -10,7 +10,6 @@
             .file-custom:focus {
                 outline: none;
             }
-
         </style>
     </x-slot>
 
@@ -43,7 +42,7 @@
                                         <th data-priority="3">NIP</th>
                                         <th data-priority="4">No. HP</th>
                                         <th>Jabatan</th>
-                                        <th data-priority="6">Penempatan</th>
+                                        <th>Penempatan</th>
                                         <th data-priority="2" class="text-center">Aksi</th>
                                     </tr>
                                 </thead>
@@ -219,7 +218,7 @@
                                 <div class="position-relative mb-2 col-md-6">
                                     <div class="form-floating">
                                         <x-input-float :id="__('name')" type="text" class="e-name" required />
-                                        <x-invalid :value=" __('Nama harus diisi')" />
+                                        <x-invalid :value="__('Nama harus diisi')" />
                                         <x-label-float :value="__('Nama Lengkap')" />
                                     </div>
                                 </div>
@@ -321,7 +320,9 @@
                         {
                             data: null,
                             defaultContent: '<button type="button" class="btn btn-success btn-xsm ebutton" data-bs-toggle="modal" data-bs-target="#edit"> <i class="uil-pen"></i> edit </button> <button type="button" class="btn btn-info btn-xsm pbutton" data-bs-toggle="modal" data-bs-target="#pass"><i class="uil-key-skeleton"></i> password </button> <button type="button" class="btn btn-danger btn-xsm dbutton" data-bs-toggle="modal" data-bs-target="#del"> <i class="uil-trash-alt"></i> hapus </button>',
-                            targets: 5
+                            targets: 5,
+                            @desktop() className: 'text-center',
+                            @enddesktop()
                         }
                     ],
                     lengthChange: !1,
@@ -429,7 +430,6 @@
                 });
 
             });
-
         </script>
 
         @if ($errors->any())
@@ -441,7 +441,6 @@
                     confirmButtonText: 'OK',
                     confirmButtonColor: '#fa5c7c'
                 })
-
             </script>
         @endif
     </x-slot>

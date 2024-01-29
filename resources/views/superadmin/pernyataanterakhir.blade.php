@@ -68,15 +68,15 @@
                                         <tr>
                                             <td class="text-center">{{ $i++ }}</td>
                                             <td>
-											<a href="{{ route('superadmin.pernyataan.terakhir.pd', [$d->pd]) }}"
+                                                <a href="{{ route('superadmin.pernyataan.terakhir.pd', [$id, $d->pd]) }}"
                                                     class="link-secondary">
-                                                @desktop() {{ $d->pd }} @elsedesktop()
-                                                {{ str_replace('Dinas', 'Din.', str_replace('Kecamatan', 'Kec.', str_replace('Bagian', 'Bag.', $d->pd))) }}
-                                                @enddesktop()
-												@if($d->t3 != 0)
-													<sup class="bg-danger ms-1 text-white rounded" style="padding:0.1em 0.6em; font-size:0.6rem;"><b>!</b></sup>
-													@endif
-													</a>
+                                                    @desktop() {{ $d->pd }} @elsedesktop()
+                                                    {{ str_replace('Dinas', 'Din.', str_replace('Kecamatan', 'Kec.', str_replace('Bagian', 'Bag.', $d->pd))) }}
+                                                    @enddesktop()
+                                                    @if ($d->t3 != 0)
+                                                        <sup class="bg-danger ms-1 text-white rounded" style="padding:0.1em 0.6em; font-size:0.6rem;"><b>!</b></sup>
+                                                    @endif
+                                                </a>
                                             </td>
                                             <td class="text-center">
                                                 {{ $d->jumlah }}
@@ -94,7 +94,7 @@
                                                 {{ $d->t3 }}
                                             </td>
                                             <td class="text-center">
-                                                <a href="{{ route('superadmin.pernyataan.terakhir.pd', [$d->pd]) }}"
+                                                <a href="{{ route('superadmin.pernyataan.terakhir.pd', [$id, $d->pd]) }}"
                                                     class="btn btn-info btn-xsm">
                                                     <i class="mdi mdi-eye"></i> @notmobile() Lihat @endnotmobile()
 

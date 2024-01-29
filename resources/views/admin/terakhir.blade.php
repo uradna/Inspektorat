@@ -10,7 +10,6 @@
             .file-custom:focus {
                 outline: none;
             }
-
         </style>
     </x-slot>
 
@@ -19,7 +18,7 @@
     </x-slot>
 
     <x-slot name="breadcrumb">
-        <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
+        <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Dashboard</a> terakhir</li>
         <li class="breadcrumb-item"><a href="{{ route('admin.pernyataan') }}">Jadwal Pernyataan</a></li>
         <li class="breadcrumb-item active">Tahun {{ $tahun }} - Semester
             {{ $semester }}</li>
@@ -46,32 +45,10 @@
                                         <th data-priority="4">No. HP</th>
                                         <th>Jabatan</th>
                                         <th>Satker</th>
-                                        <th data-priority="1">Pernyataan</th>
+                                        <th data-priority="1">@desktop()Pernyataan @elsedesktop() P @enddesktop()</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    @foreach ($user as $d)
-                                        <tr>
-                                            <td>{{ $d->name }}</td>
-                                            <td>{{ $d->nip }}‎ </td>
-                                            <td>
-                                                <a href="https://wa.me/62{{ substr($d->phone, 1) }}?text=Halo Ibu/Bapak {{ $d->name }}"
-                                                    target="_blank" class="text-black-50">
-                                                    {{ $d->phone }}
-                                                </a>
-                                            </td>
-                                            <td>{{ $d->jabatan }}</td>
-                                            <td>{{ $d->satker }}</td>
-                                            <td class="text-center">
-                                                @if ($d->pernyataan == 0)
-                                                    <i class="mdi mdi-close btn btn-xsm btn-danger pe-none fst-normal"> belum </i>
-                                                @else
-                                                    <i class="mdi mdi-check btn btn-xsm btn-success pe-none fst-normal"> sudah </i>
-                                                    {{-- <a class="btn btn-xsm btn-success pe-none"> <i class="mdi mdi-check"></i> sudah </a> --}}
-                                                @endif
-                                            </td>
-                                        </tr>
-                                    @endforeach
+                                <tbody id="main">
                                 </tbody>
                             </table>
                         </div>
@@ -80,38 +57,76 @@
             </div>
         </div>
     </x-slot>
-
+    @php
+        $url = route('admin.pernyataan.ajaxLatest', [Request()->id]);
+    @endphp
     <x-slot name="script">
         <script>
             $(document).ready(function() {
                 "use strict";
                 var a = $("#datatable-buttons").DataTable({
+                    @notmobile()
+                    dom: '<"container-fluid"<"row"<"col ps-0"B><"col pe-0"f>>>rtip',
+                    @elsenotmobile()
+                    dom: 'Bfrtip',
+                    @endnotmobile()
+
+                    ajax: "{{ $url }}",
+                    dataSrc: 'data',
+                    columnDefs: [{
+                            data: 'name',
+                            targets: 0
+                        },
+                        {
+                            data: 'nip',
+                            targets: 1,
+                            render: function(data, type, row) {
+                                return row.nip.substr(0, 8) + " " + row.nip.substr(8, 6) + " " + row.nip.substr(14, 1) + " " + row.nip.substr(15, 3);
+                            }
+                        },
+                        {
+                            data: 'phone',
+                            targets: 2
+                        },
+                        {
+                            data: 'jabatan',
+                            targets: 3
+                        },
+                        {
+                            data: 'satker',
+                            targets: 4
+                        },
+                        {
+                            data: 'pernyataan',
+                            targets: 5,
+                            render: function(data, type, row) {
+                                if (row.pernyataan === "1") {
+                                    return '<i class="mdi mdi-check btn btn-xsm btn-success pe-none fst-normal"> @desktop()sudah @enddesktop() </i>';
+                                } else {
+
+                                    return '<i class="mdi mdi-close btn btn-xsm btn-danger pe-none fst-normal"> @desktop()belum @enddesktop() </i>';
+
+                                }
+                            }
+                        }
+                    ],
                     order: [
                         [5, 'desc']
                     ],
                     lengthChange: !1,
-                    filter: !1,
                     searching: 1,
                     pageLength: 10,
                     info: !0,
                     buttons: [{
-                        @desktop()
+                        @notmobile()
                         text: '<i class="uil-arrow-left"></i>Kembali',
-                        @enddesktop()
-                        @mobile()
+                        @elsenotmobile()
                         text: '<i class="uil-arrow-left"></i>',
                         className: 'mb-1',
-                        @endmobile()
+                        @endnotmobile()
                         action: function(e, dt, node, config) {
                             window.open("{{ route('admin.pernyataan') }}", "_self");
                         }
-                    }, {
-                        extend: 'print',
-                        @mobile()
-                        text: '<i class="mdi mdi-printer"></i>',
-                        className: 'mb-1',
-                        @endmobile()
-                        title: 'Data Pernyataan Tahun {{ $tahun }} - Semester {{ $semester }} - {{ Auth::user()->pd }}',
                     }, {
                         extend: 'excel',
                         @mobile()
@@ -121,22 +136,20 @@
                         title: 'Data Pernyataan Tahun {{ $tahun }} - Semester {{ $semester }} - {{ Auth::user()->pd }}',
                     }, {
                         extend: 'colvis',
-                        @desktop()
+                        @notmobile()
                         text: 'Kolom',
-                        @enddesktop()
-                        @mobile()
+                        @elsenotmobile()
                         text: '<i class="mdi mdi-table-eye"></i>',
                         className: 'mb-1',
-                        @endmobile()
+                        @endnotmobile()
                     }],
                     language: {
-                        @desktop()
+                        @notmobile()
                         search: "Pencarian",
-                        @enddesktop()
-                        @mobile()
+                        @elsenotmobile()
                         search: "",
                         searchPlaceholder: "Pencarian",
-                        @endmobile()
+                        @endnotmobile()
                         info: "Menampilkan data ke _START_ sampai _END_ dari _TOTAL_ total data",
                         paginate: {
                             previous: "<i class='mdi mdi-chevron-left'>",
@@ -157,7 +170,6 @@
                     }
                 })
             });
-
         </script>
 
         @if ($errors->any())
@@ -169,7 +181,6 @@
                     confirmButtonText: 'OK',
                     confirmButtonColor: '#fa5c7c'
                 })
-
             </script>
         @endif
     </x-slot>

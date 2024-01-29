@@ -56,18 +56,13 @@
                                         <th data-priority="2">Status</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-
-                                </tbody>
+                                <tbody id="main"> </tbody>
                             </table>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
-
-
     </x-slot>
 
     <x-slot name="script">
@@ -83,21 +78,25 @@
                     ajax: "{{ route('superadmin.pernyataan.jadwal.pd.ajax', [$jadwal, $pd]) }}",
                     dataSrc: 'data',
                     columnDefs: [{
-                           data: 'name',
+                            data: 'name',
                             targets: 0,
-							render: function(data, type, row) {
+                            render: function(data, type, row) {
                                 let text = row.name;
                                 if (row.tanya1 !== null && row.tanya2 !== null && row.tanya3 !== null) {
                                     if (row.tanya3 === 1) {
-                                        text += '<sup class="bg-danger ms-1 text-white rounded" style="padding:0.1em 0.6em; font-size:0.6rem;"><b>!</b></sup>';
+                                        text +=
+                                            '<sup class="bg-danger ms-1 text-white rounded" style="padding:0.1em 0.6em; font-size:0.6rem;"><b>!</b></sup>';
                                     }
                                 }
-								return text;
+                                return text;
                             }
                         },
                         {
                             data: 'nip',
-                            targets: 1
+                            targets: 1,
+                            render: function(data, type, row) {
+                                return row.nip.substr(0, 8) + " " + row.nip.substr(8, 6) + " " + row.nip.substr(14, 1) + " " + row.nip.substr(15, 3);
+                            }
                         },
                         {
                             data: 'phone',
@@ -159,9 +158,9 @@
                             }
                         }
                     ],
-                    order: [
-                        [5, 'asc']
-                    ],
+                    // order: [
+                    //     [5, 'asc']
+                    // ],
                     lengthChange: !1,
                     filter: !1,
                     searching: 1,
@@ -186,7 +185,7 @@
                         @endmobile()
                         title: 'Data Pernyataan - Tahun {{ $jadwal->tahun }} Semester {{ $jadwal->semester }} - {{ $pd }}',
                         exportOptions: {
-                            columns: [0, 1, 2, 3, 4, 5, 6, 7]
+                            columns: [0, 1, 2, 3, 4, 5]
                         }
                     }, {
                         extend: 'colvis',

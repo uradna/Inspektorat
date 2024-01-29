@@ -43,11 +43,13 @@
                                         <tr>
                                             <td>{{ $i + 1 }}</td>
                                             <td>
-                                                <a href="{{ route('superadmin.pegawai.pd', $d->nama) }}" class="link-secondary">
-                                                    @desktop() {{ $d->nama }} @elsedesktop()
-                                                    {{ str_replace('Dinas', 'Din.', str_replace('Kecamatan', 'Kec.', str_replace('Bagian', 'Bag.', $d->nama))) }}
-                                                    @enddesktop()
-                                                </a>
+
+                                                @desktop()
+                                                <a href="{{ route('superadmin.pegawai.pd', $d->nama) }}" class="link-secondary"> {{ $d->nama }} </a>
+                                                @elsedesktop()
+                                                {{ str_replace('Dinas', 'Din.', str_replace('Kecamatan', 'Kec.', str_replace('Bagian', 'Bag.', $d->nama))) }}
+                                                @enddesktop()
+
                                             </td>
                                             @mobile() <td>{{ $d->nama }}</td> @endmobile()
                                             <td class="text-center">{{ $d->total }} </td>

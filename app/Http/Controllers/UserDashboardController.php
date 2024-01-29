@@ -19,12 +19,19 @@ class UserDashboardController extends Controller
     }
     public function index()
     {
-        $jadwal=Jadwal::latest()->first();
-        $p=Pernyataan::where('user_id', Auth::user()->id)->where('jadwal_id', $jadwal->id)->count();
-        $aktif=null;
-        if (masihBuka($jadwal->akhir)) {
-            $aktif=1;
+        $jadwal = Jadwal::latest()->first();
+        if($jadwal != null) {
+            $p = Pernyataan::where('user_id', Auth::user()->id)->where('jadwal_id', $jadwal->id)->count();
+            $aktif = null;
+            if (masihBuka($jadwal->akhir)) {
+                $aktif = 1;
+            }
+        } else {
+            $jadwal = null;
+            $aktif = null;
+            $p = null;
         }
+
         // dd($jadwal);
         return view('user.index', compact('jadwal', 'aktif', 'p'));
     }

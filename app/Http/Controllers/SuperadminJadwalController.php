@@ -52,14 +52,14 @@ class SuperadminJadwalController extends Controller
         $invalid = Jadwal::where("tahun", $request->tahun)->where("semester", $request->semester)->count();
         $aktif = Jadwal::where("status", "1")->count();
 
-        if ($invalid) {
-            $error = "Gagal...! Jadwal sudah ada.";
-            return redirect()->back()->with('fail', $error);
-        }
-        if ($aktif) {
-            $error = "Gagal...! Masih ada jadwal berlangsung.";
-            return redirect()->back()->with('fail', $error);
-        }
+        // if ($invalid) {
+        //     $error = "Gagal...! Jadwal sudah ada.";
+        //     return redirect()->back()->with('fail', $error);
+        // }
+        // if ($aktif) {
+        //     $error = "Gagal...! Masih ada jadwal berlangsung.";
+        //     return redirect()->back()->with('fail', $error);
+        // }
 
         Jadwal::create($request->all());
         return redirect()->route('superadmin.jadwal')->with('success', 'Jadwal baru berhasil disimpan.');
@@ -68,16 +68,17 @@ class SuperadminJadwalController extends Controller
     public function edit(Request $request)
     {
         $request->validate([
-            'akhir' => 'required|date|after:tomorrow',
+            // 'e-akhir' => 'required|date|after:tomorrow',
+            'eakhir' => 'required|date',
         ]);
-
-        $aktif = Jadwal::where("status", "1");
+        // dd($request);
+        $aktif = Jadwal::where("id", $request->id);
         if (!$aktif->count()) {
-            $error = "Gagal...! Tidak ada jadwal aktif.";
+            $error = "Gagal...! Jadwal tidak ditemukan.";
             return redirect()->back()->with('fail', $error);
         }
 
-        $input['akhir'] = $request->akhir;
+        $input['akhir'] = $request->eakhir;
 
         Jadwal::where("id", $aktif->first()->id)->update($input);
         return redirect()->route('superadmin.jadwal')->with('success', 'Jadwal berhasil diperbarui.');
@@ -85,13 +86,14 @@ class SuperadminJadwalController extends Controller
 
     public function close(Request $request)
     {
-        $aktif = Jadwal::where("status", "1");
+        // dd($request);
+        $aktif = Jadwal::where("id", $request->id);
         if (!$aktif->count()) {
-            $error = "Gagal...! Tidak ada jadwal aktif.";
+            $error = "Gagal...! Jadwal tidak ditemukan.";
             return redirect()->back()->with('fail', $error);
         }
 
-        $id = $aktif->first()->id;
+        $id = $request->id;
 
         $rekap = DB::select("SELECT " . $id . " as jadwal_id, u.pd, COUNT(p.user_id) AS jumlah, COUNT(DISTINCT u.id) AS total
         FROM (SELECT * FROM users WHERE level = 0 AND aktif = 1 AND pd!='') u

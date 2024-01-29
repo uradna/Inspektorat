@@ -10,7 +10,6 @@
             .file-custom:focus {
                 outline: none;
             }
-
         </style>
     </x-slot>
 
@@ -58,15 +57,9 @@
             </div>
         </div>
     </x-slot>
-    @if (Request()->id)
-        @php
-            $url = route('admin.pernyataan.ajax', [Request()->id, Request()->tahun, Request()->semester]);
-        @endphp
-    @else
-        @php
-            $url = route('admin.pernyataan.ajaxLatest');
-        @endphp
-    @endif
+    @php
+        $url = route('admin.pernyataan.ajax', [Request()->id, Request()->tahun, Request()->semester]);
+    @endphp
     <x-slot name="script">
         <script>
             $(document).ready(function() {
@@ -86,7 +79,10 @@
                         },
                         {
                             data: 'nip',
-                            targets: 1
+                            targets: 1,
+                            render: function(data, type, row) {
+                                return row.nip.substr(0, 8) + " " + row.nip.substr(8, 6) + " " + row.nip.substr(14, 1) + " " + row.nip.substr(15, 3);
+                            }
                         },
                         {
                             data: 'phone',
@@ -174,7 +170,6 @@
                     }
                 })
             });
-
         </script>
 
         @if ($errors->any())
@@ -186,7 +181,6 @@
                     confirmButtonText: 'OK',
                     confirmButtonColor: '#fa5c7c'
                 })
-
             </script>
         @endif
     </x-slot>

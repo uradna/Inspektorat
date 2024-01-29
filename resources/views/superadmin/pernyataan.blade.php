@@ -10,7 +10,6 @@
             .file-custom:focus {
                 outline: none;
             }
-
         </style>
     </x-slot>
 
@@ -40,9 +39,10 @@
                                 <thead class="bg-lighter">
                                     <tr>
                                         {{-- <th data-priority="0" width="1%">#</th> --}}
-                                        <th width="1%">#</th>
+                                        {{-- <th width="1%">#</th> --}}
                                         <th data-priority="0">Tahun</th>
                                         <th data-priority="2">Dibuka hingga</th>
+                                        <th>Status</th>
                                         <th class="text-center">
                                             Jumlah @notmobile()pernyataan @endnotmobile()
                                         </th>
@@ -57,43 +57,35 @@
                                 </thead>
                                 <tbody>
                                     @php($i = 1)
-
-                                        @if ($jadwal != '0')
+                                    {{-- {{ dd($jadwal) }} --}}
+                                    @if (count($jadwal) != 0)
+                                        @foreach ($jadwal as $j)
                                             <tr>
-                                                <td class="text-center">{{ $i++ }}</td>
-                                                <td>{{ $jadwal->tahun }} / Semester {{ $jadwal->semester }}</td>
-                                                <td>{{ konversiTanggal($jadwal->akhir) }}</td>
-                                                <td class="text-center"> {{ $jadwal->pernyataan }} </td>
-                                                <td class="text-center"> {{ $jadwal->totalPegawai }} </td>
+                                                {{-- <td class="text-center">{{ $i++ }}</td> --}}
+                                                <td>{{ $j->tahun }} / Semester {{ $j->semester }}</td>
+                                                <td>{{ konversiTanggal($j->akhir) }}
+                                                    {{-- <sup class="bg-danger ms-1 text-white rounded" style="padding:0.1em 0.6em; font-size:0.6rem;"><b>!</b></sup> --}}
+                                                </td>
+                                                <td>
+                                                    @if (masihBuka($j->akhir))
+                                                        Berlangsung
+                                                        <sup class="bg-danger ms-1 text-white rounded" style="padding:0.1em 0.6em; font-size:0.6rem;"><b>!</b></sup>
+                                                    @else
+                                                        @if (jadwalStatus($j->status))
+                                                            Berakhir
+                                                            <sup class="bg-danger ms-1 text-white rounded" style="padding:0.1em 0.6em; font-size:0.6rem;"><b>!</b></sup>
+                                                        @else
+                                                            Sudah ditutup
+                                                        @endif
+                                                    @endif
+                                                </td>
+                                                <td class="text-center"> {{ $j->pernyataan }} </td>
+                                                <td class="text-center"> {{ $j->totalPegawai }} </td>
                                                 <td class="text-center">
-                                                    {{ round(($jadwal->pernyataan / $jadwal->totalPegawai) * 100, 1) }}%
+                                                    {{ round(($j->pernyataan / $j->totalPegawai) * 100, 1) }}%
                                                 </td>
                                                 <td class="text-center">
-                                                    <a href="{{ route('superadmin.pernyataan.terakhir') }}"
-                                                        class="btn btn-info btn-xsm">
-                                                        <i class="mdi mdi-eye"></i> @notmobile() Lihat @endnotmobile()
-
-                                                    </a>
-                                                </td>
-                                            </tr>
-                                        @endif
-
-                                        @foreach ($rekap as $d)
-                                            <tr>
-                                                <td class="text-center">{{ $i++ }}</td>
-                                                <td>{{ $d->jadwal->tahun }} / Semester {{ $d->jadwal->semester }}</td>
-                                                <td>{{ konversiTanggal($d->jadwal->akhir) }}</td>
-                                                <td class="text-center">
-                                                    {{ $d->jumlah }}
-                                                </td>
-                                                <td class="text-center">
-                                                    {{ $d->total }}
-                                                </td>
-                                                <td class="text-center">
-                                                    {{ round(($d->jumlah / $d->total) * 100, 1) }}%
-                                                </td>
-                                                <td class="text-center">
-                                                    <a href="{{ route('superadmin.pernyataan.jadwal', [$d->jadwal_id]) }}"
+                                                    <a href="{{ route('superadmin.pernyataan.terakhir', $j->id) }}"
                                                         class="btn btn-info btn-xsm">
                                                         <i class="mdi mdi-eye"></i> @notmobile() Lihat @endnotmobile()
 
@@ -101,104 +93,133 @@
                                                 </td>
                                             </tr>
                                         @endforeach
-                                    </tbody>
-                                </table>
-                            </div>
+                                    @endif
+
+                                    @foreach ($rekap as $d)
+                                        <tr>
+                                            {{-- <td class="text-center">{{ $i++ }}</td> --}}
+                                            <td>{{ $d->jadwal->tahun }} / Semester {{ $d->jadwal->semester }}</td>
+                                            <td>{{ konversiTanggal($d->jadwal->akhir) }}</td>
+                                            <td>
+                                                Sudah Ditutup
+                                            </td>
+                                            <td class="text-center">
+                                                {{ $d->jumlah }}
+                                            </td>
+                                            <td class="text-center">
+                                                {{ $d->total }}
+                                            </td>
+                                            <td class="text-center">
+                                                {{ round(($d->jumlah / $d->total) * 100, 1) }}%
+                                            </td>
+                                            <td class="text-center">
+                                                <a href="{{ route('superadmin.pernyataan.jadwal', [$d->jadwal_id]) }}"
+                                                    class="btn btn-info btn-xsm">
+                                                    <i class="mdi mdi-eye"></i> @notmobile() Lihat @endnotmobile()
+
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
 
 
 
-        </x-slot>
+    </x-slot>
 
-        <x-slot name="script">
-            <script>
-                $(document).ready(function() {
-                    "use strict";
-                    var a = $("#datatable-buttons").DataTable({
+    <x-slot name="script">
+        <script>
+            $(document).ready(function() {
+                "use strict";
+                var a = $("#datatable-buttons").DataTable({
 
-                        // buttons: [{
-                        //     text: 'Jumlah pegawai saat ini :  pegawai',
-                        //     className: 'btn btn-light pe-none',
-                        //     // action: function(e, dt, node, config) {
-                        //     //     window.open("https://www.w3schools.com", "_self");
-                        //     // }
-                        // }],
-
-                        lengthChange: !1,
-                        filter: 1,
-                        // searching: 1,
-                        pageLength: 10,
-                        // bPaginate: !1,
-                        // filter: !1,
-                        info: !1,
-                        buttons: [{
-                            extend: 'print',
-                            @mobile()
-                            text: '<i class="mdi mdi-printer"></i>',
-                            className: 'mb-1',
-                            @endmobile()
-                            title: 'Data Pernyataan - Semua',
-                            exportOptions: {
-                                columns: [0, 1, 2, 3, 4, 5]
-                            }
-                        }, {
-                            extend: 'excel',
-                            @mobile()
-                            text: '<i class="mdi mdi-microsoft-excel"></i>',
-                            className: 'mb-1',
-                            @endmobile()
-                            title: 'Data Pernyataan - Semua',
-                            exportOptions: {
-                                columns: [0, 1, 2, 3, 4, 5]
-                            }
-                        }, {
-                            extend: 'colvis',
-                            @desktop()
-                            text: 'Kolom',
-                            @enddesktop()
-                            @mobile()
-                            text: '<i class="mdi mdi-table-eye"></i>',
-                            className: 'mb-1',
-                            @endmobile()
-                        }],
-                        language: {
-                            // lengthMenu: "Menampilkan _MENU_ pegawai per halaman",
-                            @desktop()
-                            search: "Pencarian",
-                            @enddesktop()
-                            @mobile()
-                            search: "",
-                            searchPlaceholder: "Pencarian",
-                            @endmobile()
-                            // info: "Menampilkan data ke _START_ sampai _END_ dari _TOTAL_ total data",
-                            paginate: {
-                                previous: "<i class='mdi mdi-chevron-left'>",
-                                next: "<i class='mdi mdi-chevron-right'>"
-                            }
-                        },
-                        drawCallback: function() {
-                            $(".dataTables_paginate > .pagination").addClass("pagination-rounded");
-                            $(".dataTables_paginate > .pagination > .active > .page-link ").addClass(
-                                "bg-secondary");
+                    // buttons: [{
+                    //     text: 'Jumlah pegawai saat ini :  pegawai',
+                    //     className: 'btn btn-light pe-none',
+                    //     // action: function(e, dt, node, config) {
+                    //     //     window.open("https://www.w3schools.com", "_self");
+                    //     // }
+                    // }],
+                    order: [
+                        [0, "desc"]
+                    ],
+                    lengthChange: !1,
+                    filter: 1,
+                    // searching: 1,
+                    pageLength: 10,
+                    // bPaginate: !1,
+                    // filter: !1,
+                    info: !1,
+                    buttons: [{
+                        extend: 'print',
+                        @mobile()
+                        text: '<i class="mdi mdi-printer"></i>',
+                        className: 'mb-1',
+                        @endmobile()
+                        title: 'Data Pernyataan - Semua',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5]
                         }
-                    });
-                    a.buttons().container().appendTo("#datatable-buttons_wrapper .col-md-6:eq(0)"), $(
-                        "#alternative-page-datatable").DataTable({
-                        pagingType: "full_numbers",
-                        drawCallback: function() {
-                            $(".dataTables_paginate > .pagination").addClass("pagination-rounded")
+                    }, {
+                        extend: 'excel',
+                        @mobile()
+                        text: '<i class="mdi mdi-microsoft-excel"></i>',
+                        className: 'mb-1',
+                        @endmobile()
+                        title: 'Data Pernyataan - Semua',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5]
                         }
-                    })
+                    }, {
+                        extend: 'colvis',
+                        @desktop()
+                        text: 'Kolom',
+                        @enddesktop()
+                        @mobile()
+                        text: '<i class="mdi mdi-table-eye"></i>',
+                        className: 'mb-1',
+                        @endmobile()
+                    }],
+                    language: {
+                        // lengthMenu: "Menampilkan _MENU_ pegawai per halaman",
+                        @desktop()
+                        search: "Pencarian",
+                        @enddesktop()
+                        @mobile()
+                        search: "",
+                        searchPlaceholder: "Pencarian",
+                        @endmobile()
+                        // info: "Menampilkan data ke _START_ sampai _END_ dari _TOTAL_ total data",
+                        paginate: {
+                            previous: "<i class='mdi mdi-chevron-left'>",
+                            next: "<i class='mdi mdi-chevron-right'>"
+                        }
+                    },
+                    drawCallback: function() {
+                        $(".dataTables_paginate > .pagination").addClass("pagination-rounded");
+                        $(".dataTables_paginate > .pagination > .active > .page-link ").addClass(
+                            "bg-secondary");
+                    }
                 });
+                a.buttons().container().appendTo("#datatable-buttons_wrapper .col-md-6:eq(0)"), $(
+                    "#alternative-page-datatable").DataTable({
+                    pagingType: "full_numbers",
+                    drawCallback: function() {
+                        $(".dataTables_paginate > .pagination").addClass("pagination-rounded")
+                    }
+                })
+            });
+        </script>
 
-            </script>
 
 
-
-            {{-- <script>
+        {{-- <script>
                 function autocomplete(inp, arr) {
                     var currentFocus;
                     inp.addEventListener("input", function(e) {
@@ -290,9 +311,9 @@
 
             </script> --}}
 
-            {{-- AUTOCOMPLETE --}}
+        {{-- AUTOCOMPLETE --}}
 
-            {{-- <script>
+        {{-- <script>
                 $('.delete_alert').on('click', function(e) {
                     e.preventDefault();
                     var form = $(this).parents('form');
@@ -316,18 +337,17 @@
                 });
             </script> --}}
 
-            @if ($errors->any())
-                <script type="text/javascript">
-                    Swal.fire({
-                        title: 'Ops...',
-                        html: 'Ada sesuatu yang salah.<br>Pastikan form sudah terisi semua dengan benar.',
-                        icon: 'error',
-                        confirmButtonText: 'OK',
-                        confirmButtonColor: '#fa5c7c'
-                    })
+        @if ($errors->any())
+            <script type="text/javascript">
+                Swal.fire({
+                    title: 'Ops...',
+                    html: 'Ada sesuatu yang salah.<br>Pastikan form sudah terisi semua dengan benar.',
+                    icon: 'error',
+                    confirmButtonText: 'OK',
+                    confirmButtonColor: '#fa5c7c'
+                })
+            </script>
+        @endif
+    </x-slot>
 
-                </script>
-            @endif
-        </x-slot>
-
-    </x-superadmin-layout>
+</x-superadmin-layout>

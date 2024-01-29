@@ -20,7 +20,7 @@
     <x-slot name="breadcrumb">
         <li class="breadcrumb-item"><a href="{{ route('superadmin.dashboard') }}">Dashboard</a></li>
         <li class="breadcrumb-item"><a href="{{ route('superadmin.pernyataan') }}">Pernyataan</a></li>
-        <li class="breadcrumb-item"><a href="{{ route('superadmin.pernyataan.terakhir') }}">Tahun
+        <li class="breadcrumb-item"><a href="{{ route('superadmin.pernyataan.terakhir', $id) }}">Tahun
                 {{ $jadwal->tahun }} Semester {{ $jadwal->semester }}</a></li>
         <li class="breadcrumb-item active">{{ truncate($pd) }}</li>
     </x-slot>
@@ -35,7 +35,7 @@
                 <div class="card ">
                     <div class=" card-body">
                         <h4 class="header-title mb-3">Data Pernyataan - Tahun {{ $jadwal->tahun }} Semester
-                            {{ $jadwal->semester }} - {{ $pd }} xxx</h4>
+                            {{ $jadwal->semester }} - {{ $pd }}</h4>
 
                         <div class="table-responsive">
                             <table id="datatable-buttons" class="table table-striped dt-responsive nowrap w-100">
@@ -51,9 +51,7 @@
                                         <th data-priority="1">Status</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-
-                                </tbody>
+                                <tbody id="main"> </tbody>
                             </table>
                         </div>
                     </div>
@@ -72,24 +70,28 @@
                     @elsenotmobile()
                     dom: 'Bfrtip',
                     @endnotmobile()
-                    ajax: "{{ route('superadmin.pernyataan.terakhir.pd.ajax', $pd) }}",
+                    ajax: "{{ route('superadmin.pernyataan.terakhir.pd.ajax', [$id, $pd]) }}",
                     dataSrc: 'data',
                     columnDefs: [{
                             data: 'name',
                             targets: 0,
-							render: function(data, type, row) {
+                            render: function(data, type, row) {
                                 let text = row.name;
                                 if (row.tanya1 !== null && row.tanya2 !== null && row.tanya3 !== null) {
                                     if (row.tanya3 === 1) {
-                                        text += '<sup class="bg-danger ms-1 text-white rounded" style="padding:0.1em 0.6em; font-size:0.6rem;"><b>!</b></sup>';
+                                        text +=
+                                            '<sup class="bg-danger ms-1 text-white rounded" style="padding:0.1em 0.6em; font-size:0.6rem;"><b>!</b></sup>';
                                     }
                                 }
-								return text;
+                                return text;
                             }
                         },
                         {
                             data: 'nip',
-                            targets: 1
+                            targets: 1,
+                            render: function(data, type, row) {
+                                return row.nip.substr(0, 8) + " " + row.nip.substr(8, 6) + " " + row.nip.substr(14, 1) + " " + row.nip.substr(15, 3);
+                            }
                         },
                         {
                             data: 'phone',
@@ -136,7 +138,7 @@
                             targets: 6,
                             render: function(data, type, row) {
                                 let text = "";
-                                let url = "../../pernyataan/pdf/{{ $jadwal->id }}/" + row.id;
+                                let url = "../../../pernyataan/pdf/{{ $jadwal->id }}/" + row.id;
                                 if (row.pernyataan === 1) {
                                     text +=
                                         '<i class="mdi mdi-check btn btn-xsm btn-success pe-none fst-normal"> sudah  </i>';
@@ -167,7 +169,7 @@
                         className: 'mb-1',
                         @endmobile()
                         action: function(e, dt, node, config) {
-                            window.open("{{ route('superadmin.pernyataan.terakhir') }}",
+                            window.open("{{ route('superadmin.pernyataan.terakhir', $id) }}",
                                 "_self");
                         }
                     }, {
@@ -178,7 +180,7 @@
                         @endmobile()
                         title: 'Data Pernyataan - Tahun {{ $jadwal->tahun }} Semester {{ $jadwal->semester }} - {{ $pd }}',
                         exportOptions: {
-                            columns: [0, 1, 2, 3, 4, 5, 6, 7]
+                            columns: [0, 1, 2, 3, 4, 5]
                         }
                     }, {
                         extend: 'colvis',

@@ -6,6 +6,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PrintController;
 use App\Http\Controllers\UserBantuanController;
 
+use App\Http\Controllers\SuperadminAccountController;
 use App\Http\Controllers\SuperadminDashboardController;
 use App\Http\Controllers\SuperadminLaporanController;
 use App\Http\Controllers\SuperadminPernyataanController;
@@ -50,6 +51,11 @@ Route::get('/bantuan', [UserBantuanController::class, 'index'])->name('bantuan')
 //                         SUPERADMIN ROUTE - START                       |
 // ------------------------------------------------------------------------
 Route::get('/superadmin', [SuperadminDashboardController::class, 'index'])->name('superadmin.dashboard');
+
+Route::get('/superadmin/account', [SuperadminAccountController::class, 'index'])->name('superadmin.account');
+Route::post('/superadmin/password', [SuperadminAccountController::class, 'password'])->name('superadmin.password');
+
+
 Route::get('/superadmin/laporan', [SuperadminLaporanController::class, 'index'])->name('superadmin.laporan');
 
 
@@ -57,10 +63,10 @@ Route::get('/superadmin/pernyataan', [SuperadminPernyataanController::class, 'in
 
 Route::get('/superadmin/pernyataan/{id}', [SuperadminPernyataanController::class, 'jadwal'])->name('superadmin.pernyataan.jadwal');
 
-Route::get('/superadmin/terakhir', [SuperadminPernyataanController::class, 'terakhir'])->name('superadmin.pernyataan.terakhir');
+Route::get('/superadmin/aktif/{id}', [SuperadminPernyataanController::class, 'terakhir'])->name('superadmin.pernyataan.terakhir');
 
-Route::get('/superadmin/terakhir/{pd}', [SuperadminPernyataanController::class, 'terakhirpd'])->name('superadmin.pernyataan.terakhir.pd');
-Route::get('/superadmin/ajax/terakhir/{pd}', [SuperadminPernyataanController::class, 'terakhirpdAjax'])->name('superadmin.pernyataan.terakhir.pd.ajax');
+Route::get('/superadmin/aktif/{id}/{pd}', [SuperadminPernyataanController::class, 'terakhirpd'])->name('superadmin.pernyataan.terakhir.pd');
+Route::get('/superadmin/ajax/terakhir/{id}/{pd}', [SuperadminPernyataanController::class, 'terakhirpdAjax'])->name('superadmin.pernyataan.terakhir.pd.ajax');
 
 Route::get('/superadmin/pernyataan/{id}/{pd}', [SuperadminPernyataanController::class, 'jadwalpd'])->name('superadmin.pernyataan.jadwal.pd');
 Route::get('/superadmin/ajax/pernyataan/{id}/{pd}', [SuperadminPernyataanController::class, 'jadwalpdAjax'])->name('superadmin.pernyataan.jadwal.pd.ajax');

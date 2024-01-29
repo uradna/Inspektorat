@@ -17,7 +17,7 @@
                     </span>
                     <span>
                         <span class="account-user-name">{{ Auth::user()->name ?? '-' }}</span>
-                        <span class="account-position">Superadmin {{ Auth::user()->pd }}</span>
+                        <span class="account-position">{{ Auth::user()->pd }}</span>
                     </span>
                 </a>
                 <div
@@ -26,7 +26,7 @@
                         @csrf
 
                         {{-- ------------------------------------------- --}}
-                        <a class="dropdown-item notify-item">
+                        {{-- <a class="dropdown-item notify-item">
                             <input class="form-check-input me-1" type="radio" name="data-layout-mode"
                                 id="layout-mode-fluid" value="fluid">
                             <label for="layout-mode-fluid">
@@ -39,16 +39,17 @@
                             <label for="data-layout-detached">
                                 Detached &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                             </label>
-                        </a>
+                        </a> --}}
                         {{-- ------------------------------------------- --}}
 
 
-                        <a href="{{ route('admin.account') }}" class="dropdown-item notify-item">
+                        <a href="{{ route('superadmin.account') }}" class="dropdown-item notify-item">
                             <i class="mdi mdi-account-circle me-1"></i>
                             <span>Kelola akun</span>
                         </a>
                         <a class="dropdown-item notify-item pointer" onclick="event.preventDefault();
-                        this.closest('form').submit();" role="button" target="_blank">
+                        this.closest('form').submit();"
+                            role="button" target="_blank">
                             <i class="mdi mdi-logout me-1"></i>
                             <span>Logout</span>
                         </a>

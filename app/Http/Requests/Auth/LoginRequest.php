@@ -50,7 +50,7 @@ class LoginRequest extends FormRequest
     public function authenticate()
     {
         $this->ensureIsNotRateLimited();
-        
+
         // if (user not exist)
         // {
         //     if(login hebat true){
@@ -66,46 +66,73 @@ class LoginRequest extends FormRequest
         // if(user aktif)
 
 
-        
+
         $count = DB::table('users')->where('username', $this->username)->count();
 
         //new cpns/user
 
         //reset password md5 -> bcrypt
-        if ($count==1) {
+        if ($count == 1) {
             $user = DB::table('users')->where('username', $this->username)->first();
             if ($user->password == md5($this->password)) {
                 $p = Hash::make($this->password);
                 $update = DB::table('users')->where('username', $this->username)->update(['password' => $p]);
                 $this->password = $p;
             }
-            // cek user aktif
+            if (! $user->aktif) {
+                $del = DB::table('hapuses')->where('user_id', $user->id)->count();
+                if($del == 0) {
+                    $update = DB::table('users')->where('username', $this->username)->update(['aktif' => '1']);
+                }
+            }
+
             if (! User::where('username', $this->username)->first()->aktif) {
                 RateLimiter::hit($this->throttleKey());
 
                 throw ValidationException::withMessages([
-                'email' => __('auth.failed'),
-            ]);
+                    'email' => __('auth.failed'),
+                ]);
+            }
+
+            $response = Http::asForm()->post('https://simashebat.ponorogo.go.id/simple-login-api.php', [
+                'username' => $this->username,
+                'password' => $this->password,]);
+            $result = json_decode($response->getBody()->getContents());
+            if($result != null) {
+                if ($result->success) {
+                    $p = Hash::make($this->password);
+                    $update = DB::table('users')->where('username', $this->username)->update(['password' => $p]);
+                    $this->password = $p;
+                }
             }
         }
 
         if ($count == 0) {
             $response = Http::asForm()->post('https://simashebat.ponorogo.go.id/simple-login-api.php', [
                         'username' => $this->username,
-                        'password' =>$this->password,]);
+                        'password' => $this->password,]);
             $result = json_decode($response->getBody()->getContents());
-            if ($result->success) {
-                $new['username'] = $result->data->nip_baru;
-                $new['password'] = Hash::make($this->password);
-                $new['name'] = ucwords(strtolower($result->data->nama));
-                $new['nip'] = $result->data->nip_baru;
-                $new['email'] = $result->data->email;
-                $new['phone'] = $result->data->no_hp;
-                User::create($new);
+            if($result != null) {
+                if ($result->success) {
+                    $new['username'] = $result->data->nip_baru;
+                    $new['password'] = Hash::make($this->password);
+                    $new['name'] = ucwords(strtolower($result->data->nama));
+                    $new['nip'] = $result->data->nip_baru;
+                    $new['email'] = $result->data->email;
+                    $new['phone'] = $result->data->no_hp;
+                    User::create($new);
+                }
+            } else {
+                if (! Auth::attempt($this->only('username', 'password'), $this->boolean('remember'))) {
+                    RateLimiter::hit($this->throttleKey());
+
+                    throw ValidationException::withMessages([
+                        'email' => __('auth.api'),
+                    ]);
+                }
             }
+
         }
-
-
 
         if (! Auth::attempt($this->only('username', 'password'), $this->boolean('remember'))) {
             RateLimiter::hit($this->throttleKey());
@@ -150,6 +177,6 @@ class LoginRequest extends FormRequest
      */
     public function throttleKey()
     {
-        return Str::lower($this->input('email')).'|'.$this->ip();
+        return Str::lower($this->input('email')) . '|' . $this->ip();
     }
 }

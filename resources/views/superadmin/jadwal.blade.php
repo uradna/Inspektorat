@@ -37,7 +37,8 @@
 
                         <div>
                             <button type="button" class="btn btn-success mb-1" data-bs-toggle="modal"
-                                data-bs-target="#new" @if (jadwalStatus($aktif->status)) disabled @endif>
+                                {{-- data-bs-target="#new" @if (jadwalStatus($aktif->status)) disabled @endif> --}}
+                                data-bs-target="#new">
                                 <i class="mdi mdi-plus-circle me-2"></i> Tambah Jadwal
                             </button>
                         </div>
@@ -45,7 +46,7 @@
                             <table id="datatable-buttons" class="table table-striped mb-0 dt-responsive nowrap w-100">
                                 <thead class="bg-lighter">
                                     <tr>
-                                        <th style="width:2%">#</th>
+                                        {{-- <th style="width:2%">#</th> --}}
                                         <th data-priority="0">Tahun</th>
                                         <th data-priority="2">Dibuka hingga</th>
                                         <th>Status</th>
@@ -55,8 +56,10 @@
                                 <tbody>
                                     @foreach ($jadwal as $i => $d)
                                         <tr>
-                                            <td>{{ $i + 1 }}</td>
-                                            <td>{{ $d->tahun }} /
+                                            {{-- <td>{{ $i + 1 }}</td> --}}
+                                            <td>
+
+                                                {{ $d->tahun }} /
                                                 @desktop
                                                     Semester
                                                 @enddesktop
@@ -88,12 +91,17 @@
                                                     <form action="{{ route('superadmin.jadwal.close') }}"
                                                         method="POST">
                                                         @csrf
-                                                        <button type="button" class="btn btn-success btn-xsm "
-                                                            data-bs-toggle="modal" data-bs-target="#new">
+                                                        <button type="button" class="btn btn-success btn-xsm btn_edit"
+                                                            data-bs-toggle="modal" data-bs-target="#edit"
+                                                            data-id="{{ $d->id }}"
+                                                            data-akhir="{{ $d->akhir }}"
+                                                            data-tahun="{{ $d->tahun }}"
+                                                            data-semester="{{ $d->semester }}">
                                                             <i class="uil-pen"></i>
                                                             Edit
                                                         </button>
                                                         {{--  --}}
+                                                        <input type="hidden" name="id" value="{{ $d->id }}">
                                                         <button class="btn btn-danger btn-xsm delete_alert"
                                                             type="submit">
                                                             <i class="uil-folder-lock"></i>
@@ -120,144 +128,12 @@
         </div>
 
         {{-- MODAL NEW JADWAL --}}
-        @if (!jadwalStatus($aktif->status))
-            <div class="modal fade" id="new" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
-                aria-hidden="true" data-bs-backdrop="static">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h4 class="modal-title" id="myLargeModalLabel">
-                                Tambah jadwal baru
-                            </h4>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"
-                                id="disp"></button>
-                        </div>
-                        <div class="modal-body">
-                            <form class="needs-validation @if ($errors->any()) was-validated @endif" novalidate="" method="POST"
-                                action="{{ route('superadmin.jadwal.create') }}">
-                                @csrf
-
-                                {{-- ----- --}}
-                                <div class="row">
-                                    <div class="position-relative mb-2 col-md-6">
-                                        <div class="form-floating">
-                                            <x-input-float id="tahun" type="text" value="{{ $aktif->tahun_baru }}"
-                                                pattern="\d{4}" required />
-                                            <x-invalid :value="__('Tahun harus diisi')" />
-                                            <x-label-float :value="__('Tahun')" />
-                                        </div>
-                                    </div>
-
-                                    <div class="position-relative mb-2 col-md-6">
-                                        <div class="form-floating">
-                                            <select class="form-select text-dark" name="semester" required>
-
-                                                <option value="1" @if (old('semester') != null && old('pangkat') == 1) selected @elseif (old('pangkat') == null && $aktif->semester_baru == 1) selected @endif>
-                                                    1 (satu)
-                                                </option>
-                                                <option value="2" @if (old('semester') != null && old('pangkat') == 2) selected @elseif (old('pangkat') == null && $aktif->semester_baru == 2) selected @endif>
-                                                    2 (dua)
-                                                </option>
-
-                                            </select>
-                                            <x-invalid :value="__('Semester harus dipilih')" />
-                                            <x-label-float :value="__('Semester')" />
-                                        </div>
-                                    </div>
-                                </div>
-                                {{-- ----- --}}
-                                <div class="row ">
-                                    <div class="position-relative mb-2 col-md-12">
-                                        <div class="form-floating input-group input-group-merge">
-                                            <x-input-float :id="__('akhir')" type="date" min="{{ date('Y-m-d') }}"
-                                                value="{{ old('akhir') ?? '' }}" required />
-                                            <x-invalid :value="__('Tanggal harus dipilih')" />
-                                            <x-label-float :value="__('Dibuka hingga')"
-                                                style="z-index: 5 !important;" />
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="row g-2 mt-1">
-                                    <div class="col-md-12 text-end">
-                                        <button type="button" class="btn btn-lighter me-2"
-                                            data-bs-dismiss="modal">Batal</button>
-                                        <button type="submit" class="btn btn-info">
-                                            SIMPAN
-                                        </button>
-                                    </div>
-                                </div>
-                                {{-- {{ dd($errors) }} --}}
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        @endif
-        @if (jadwalStatus($aktif->status))
-            <div class="modal fade" id="new" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
-                aria-hidden="true" data-bs-backdrop="static">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h4 class="modal-title" id="myLargeModalLabel">
-                                Edit jadwal
-                            </h4>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"
-                                id="disp"></button>
-                        </div>
-
-                        <div class="modal-body">
-                            <form class="needs-validation @if ($errors->any()) was-validated @endif" novalidate="" method="POST"
-                                action="{{ route('superadmin.jadwal.edit') }}">
-                                @csrf
-                                {{-- ----- --}}
-                                <div class="row">
-                                    <div class="position-relative mb-2 col-md-6">
-                                        <div class="form-floating">
-                                            <x-input-float type="text" value="{{ $aktif->tahun }}" disabled
-                                                readonly />
-                                            <x-label-float :value="__('Tahun')" />
-                                        </div>
-                                    </div>
-
-                                    <div class="position-relative mb-2 col-md-6">
-                                        <div class="form-floating">
-                                            <x-input-float type="text" value="{{ $aktif->semester }}" disabled
-                                                readonly />
-                                            <x-label-float :value="__('Semester')" />
-                                        </div>
-                                    </div>
-                                </div>
-                                {{-- ----- --}}
-                                <div class="row ">
-                                    <div class="position-relative mb-2 col-md-12">
-                                        <div class="form-floating input-group input-group-merge">
-                                            <x-input-float :id="__('akhir')" type="date" min="{{ date('Y-m-d') }}"
-                                                value="{{ old('akhir') ?? $aktif->akhir }}" required />
-                                            <x-invalid :value="__('Tanggal harus dipilih')" />
-                                            <x-label-float :value="__('Dibuka hingga')"
-                                                style="z-index: 5 !important;" />
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="row g-2 mt-1">
-                                    <div class="col-md-12 text-end">
-                                        <button type="button" class="btn btn-lighter me-2"
-                                            data-bs-dismiss="modal">Batal</button>
-                                        <button type="submit" class="btn btn-info">
-                                            SIMPAN
-                                        </button>
-                                    </div>
-                                </div>
-                                {{-- {{ dd($errors) }} --}}
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        @endif
+        {{-- @if (!jadwalStatus($aktif->status)) --}}
+        @include('components.superadmin.modal.jadwal-add')
+        {{-- @endif --}}
+        {{-- @if (jadwalStatus($aktif->status)) --}}
+        @include('components.superadmin.modal.jadwal-edit')
+        {{-- @endif --}}
     </x-slot>
 
     <x-slot name="script">
@@ -283,7 +159,7 @@
                     //     text: 'Kolom'
                     // }],
                     order: [
-                        [1, "desc"]
+                        [0, "desc"]
                     ],
                     columnDefs: [{
                         targets: [0],
@@ -313,14 +189,45 @@
                     drawCallback: function() {
                         $(".dataTables_paginate > .pagination").addClass("pagination-rounded")
                     }
-                })
+                });
+
+                a.on('click', '.btn_edit', function(e) {
+                    // @notmobile()
+                    // let id = $(this).closest('tr').attr('id');
+                    // @elsenotmobile()
+                    // let id = $(this).closest('tr').prev().attr('id');
+                    // @endnotmobile()
+                    // let all_data = a.rows().data();
+                    // let result = $.grep(all_data, function(e) {
+                    //     return e.DT_RowId == id;
+                    // });
+                    // let data = result[0];
+
+                    $('#e-id').val($(this).data('id'));
+                    $('#eakhir').val($(this).data('akhir'));
+                    $('#etahun').val($(this).data('tahun'));
+                    $('#esemester').val($(this).data('semester'));
+                    // $('.e-name').val(data['name']);
+                    // $('.e-nip').val(data['nip']);
+                    // $('.e-email').val(data['email']);
+                    // $('.e-phone').val(data['phone']);
+                    // $('.e-pd').val(data['pd']);
+                    // $('.e-satker').val(data['satker']);
+                    // alert($(this).data('id'));
+                    // alert($(this).data('id'));
+                });
             });
         </script>
 
         @if ($errors->any())
             <script type="text/javascript">
                 $(window).on('load', function() {
-                    $('#new').modal('show');
+                    @if (old('eakhir'))
+                        $('#edit').modal('show');
+                    @else
+                        $('#new').modal('show');
+                    @endif
+
                 });
             </script>
         @endif

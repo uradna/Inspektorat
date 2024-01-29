@@ -24,15 +24,26 @@ class SuperadminPernyataanController extends Controller
     {
         $rekap = Rekapitulasi::select('id', 'jadwal_id', \DB::raw("SUM(jumlah) AS jumlah"), \DB::raw("SUM(total) AS total"))->groupBy("jadwal_id")->orderByDesc('jadwal_id')->get();
 
-        $jadwal = 0;
+        $jadwal = array();
         $j = Jadwal::where('status', '1')->get();
         if ($j->isNotEmpty()) {
-            $pernyataan = Pernyataan::where('jadwal_id', $j[0]->id)->count();
             $totalPegawai = User::pegawai()->count();
-            $jadwal = $j[0];
-            $jadwal->pernyataan = $pernyataan;
-            $jadwal->totalPegawai = $totalPegawai;
+            foreach($j as $val) {
+                $pernyataan = Pernyataan::where('jadwal_id', $val->id)->count();
+                $new = $val;
+                $new->pernyataan = $pernyataan;
+                $new->totalPegawai = $totalPegawai;
+                array_push($jadwal, $new);
+            }
         }
+        // $j = Jadwal::where('status', '1')->get();
+        // if ($j->isNotEmpty()) {
+        //     $pernyataan = Pernyataan::where('jadwal_id', $j[0]->id)->count();
+        //     $totalPegawai = User::pegawai()->count();
+        //     $jadwal = $j[0];
+        //     $jadwal->pernyataan = $pernyataan;
+        //     $jadwal->totalPegawai = $totalPegawai;
+        // }
         return view('superadmin.pernyataan', compact('rekap', 'jadwal'));
     }
 
@@ -69,9 +80,9 @@ class SuperadminPernyataanController extends Controller
         return view('superadmin.perjadwalpd', compact('user', 'jadwal', 'pd', 'id'));
     }
 
-    public function terakhir()
+    public function terakhir($id)
     {
-        $j = Jadwal::where('status', '1')->get();
+        $j = Jadwal::where('id', $id)->get();
         if ($j->count() == 0) {
             dd('kosong');
         }
@@ -82,29 +93,33 @@ class SuperadminPernyataanController extends Controller
         GROUP BY u.pd ORDER BY jumlah DESC");
         $count = DB::select("SELECT COUNT(id) as n FROM pernyataans WHERE jadwal_id = " . $jadwal->id . " AND tanya3 = '1' ");
         $count = $count[0]->n;
-        return view('superadmin.pernyataanterakhir', compact('rekap', 'jadwal', 'count'));
+        return view('superadmin.pernyataanterakhir', compact('rekap', 'jadwal', 'count', 'id'));
     }
 
-    public function terakhirpd($pd)
+    public function terakhirpd($id, $pd)
     {
+        // dd($pd);
         if (!checkPD($pd)) {
             return redirect()->route('superadmin.pernyataan');
         }
-        $j = Jadwal::where('status', '1')->get();
+        $j = Jadwal::where('id', $id)->get();
         if ($j->count() == 0) {
             dd('kosong');
         }
         $jadwal = $j->first();
         // dd($user);
-        return view('superadmin.pernyataanterakhirpd', compact('jadwal', 'pd'));
+        return view('superadmin.pernyataanterakhirpd', compact('jadwal', 'id', 'pd'));
     }
 
-    public function terakhirpdAjax($pd)
+    public function terakhirpdAjax($id, $pd)
     {
         if (!checkPD($pd)) {
             return redirect()->route('superadmin.pernyataan');
         }
-        $j = Jadwal::where('status', '1')->get();
+        if (!cekJadwal($id)) {
+            return redirect()->route('superadmin.pernyataan');
+        }
+        $j = Jadwal::where('id', $id)->get();
         if ($j->count() == 0) {
             dd('kosong');
         }

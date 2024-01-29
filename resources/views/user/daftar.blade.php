@@ -31,14 +31,13 @@
                                 dibuka hingga tanggal<b class="text-warning">
                                     {{ konversiTanggal($aktif->akhir) }}</b>.<br class="mb-1">
                             </div>
-
                         @endif
 
                         <div class="table-responsive">
                             <table id="datatable-buttons" class="table table-striped mb-0 dt-responsive nowrap w-100">
                                 <thead class="bg-lighter">
                                     <tr>
-                                        <th style="width:2%">#</th>
+                                        {{-- <th style="width:2%">#</th> --}}
                                         <th data-priority="1">Tahun</th>
                                         <th data-priority="3">Dibuka hingga</th>
                                         <th>Status</th>
@@ -48,10 +47,14 @@
                                 <tbody>
                                     @foreach ($jadwal as $i => $d)
                                         <tr>
-                                            <td>{{ $i + 1 }}</td>
+                                            {{-- <td>{{ $i + 1 }}</td> --}}
                                             <td>{{ $d->tahun }} /
-                                                @desktop Semester @enddesktop
-                                                @mobile smt @endmobile
+                                                @desktop
+                                                    Semester
+                                                @enddesktop
+                                                @mobile
+                                                    smt
+                                                @endmobile
                                                 {{ $d->semester }}
                                             </td>
                                             <td>
@@ -67,6 +70,7 @@
                                                     @case('0')
                                                         -
                                                     @break
+
                                                     @case('1')
                                                         <a href="{{ route('user.pdf', $d->pernyataan_id) }}"
                                                             class="btn btn-info btn-xsm">
@@ -80,11 +84,13 @@
                                                             src="{{ route('user.print', $d->pernyataan_id) }}" width="0"
                                                             height="0" frameborder="0"></iframe> --}}
                                                     @break
+
                                                     @case('2')
                                                         <a href="{{ route('user.pernyataan.biodata', $d->id) }}"
                                                             class="btn btn-success btn-xsm"> <i class="uil-pen"></i>
                                                             Isi pernyataan </a>
                                                     @break
+
                                                     @case('3')
                                                         -
                                                     @break
@@ -114,7 +120,7 @@
                 var a = $("#datatable-buttons").DataTable({
                     lengthChange: !1,
                     searching: 1,
-                    pageLength: 5,
+                    pageLength: 10,
                     // bPaginate: !1,
                     // filter: !1,
                     // info: !1,
@@ -130,7 +136,7 @@
                     //     text: 'Kolom'
                     // }],
                     order: [
-                        [1, "desc"]
+                        [0, "desc"]
                     ],
                     columnDefs: [{
                         targets: [0],
@@ -162,7 +168,6 @@
                     }
                 })
             });
-
         </script>
 
 
