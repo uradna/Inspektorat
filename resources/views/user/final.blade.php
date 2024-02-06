@@ -76,8 +76,9 @@
                                                 <h3 class="mt-0">Satu langkah lagi...</h3>
 
                                                 <p class="col-6 mb-3 mx-auto font-14">
-                                                    Anda telah mengisi pernyataan gratifikasi untuk periode
-                                                    semester 2 tahun 2022.<br><br>
+                                                    Anda telah melakukan pembuatan pernyataan gratifikasi untuk<br> periode <b>Semester {{ $jadwal->semester }} Tahun
+                                                        {{ $jadwal->tahun }}</b>
+                                                    ({{ convertPeriode($jadwal->tahun, $jadwal->semester) }}).<br><br>
                                                     Dengan menekan tombol <b>SIMPAN</b>, anda menyatakan
                                                     telah mengisi pernyataan dengan sebenar-benarnya dan
                                                     bersedia mempertanggungjawabkannya secara hukum.

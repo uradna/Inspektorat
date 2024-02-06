@@ -41,7 +41,6 @@
             .swal2-styled.swal2-cancel {
                 color: #555 !important;
             }
-
         </style>
     </x-slot>
     <x-slot name="title">
@@ -169,7 +168,8 @@
                                                 <option selected disabled hidden value="">Pilih pangkat/golongan
                                                 </option>
                                                 @foreach (getPangkat() as $d)
-                                                    <option value="{{ $d->nama }}" @if (old('pangkat') != null && old('pangkat') == $d->nama) selected @elseif (old('pangkat') == null && Auth::user()->pangkat == $d->nama ) selected @endif>
+                                                    <option value="{{ $d->nama }}"
+                                                        @if (old('pangkat') != null && old('pangkat') == $d->nama) selected @elseif (old('pangkat') == null && Auth::user()->pangkat == $d->nama) selected @endif>
                                                         {{ $d->nama }}
                                                     </option>
                                                 @endforeach
@@ -203,7 +203,7 @@
                                 </div>
                                 <div class="row g-2">
                                     <div class="col-md-12">
-                                        <button type="submit" class="btn btn-info float-end">
+                                        <button type="submit" class="btn btn-info float-end" id="alert1">
                                             Selanjutnya <i class="mdi mdi-arrow-right ms-1"></i>
                                         </button>
                                     </div>
@@ -226,6 +226,7 @@
 
 
     <x-slot name="script">
+
         <script>
             function autocomplete(inp, arr) {
                 var currentFocus;
@@ -315,7 +316,31 @@
 
             /*initiate the autocomplete function on the "myInput" element, and pass along the countries array as possible autocomplete values:*/
             autocomplete(document.getElementById("pd"), dinas);
+        </script>
 
+        <script>
+            $('#alert1').on('click', function(e) {
+                e.preventDefault();
+                var form = $(this).parents('form');
+                let pd = $('#pd').val();
+                Swal.fire({
+                    title: 'Anda yakin?',
+                    text: "Pastikan data Perangkat Daerah sudah benar.",
+                    icon: 'warning',
+                    iconColor: '#fa5c7c',
+                    showCancelButton: true,
+                    confirmButtonColor: '#39afd1',
+                    cancelButtonColor: '#dadee2',
+                    confirmButtonText: 'Ya, lanjutkan!!',
+                    cancelButtonText: 'Batal',
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.value) {
+
+                        form.submit();
+                    }
+                });
+            });
         </script>
     </x-slot>
 </x-user-layout>

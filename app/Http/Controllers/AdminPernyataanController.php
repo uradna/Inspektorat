@@ -52,7 +52,7 @@ class AdminPernyataanController extends Controller
         users.satker,  
         CASE WHEN pernyataans.id IS NULL THEN "0" ELSE "1" END AS pernyataan
         FROM users
-        LEFT JOIN (select * from pernyataans WHERE pernyataans.jadwal_id = "' . $j->id . '") AS pernyataans ON users.id = pernyataans.user_id
+        LEFT JOIN (select * from pernyataans WHERE pernyataans.jadwal_id = "' . $j->id . '" AND pd = "' . Auth::user()->pd . '") AS pernyataans ON users.id = pernyataans.user_id
         WHERE users.pd = "' . Auth::user()->pd . '" AND users.level = "0" AND users.aktif = "1" ORDER BY pernyataan DESC');
 
         $tahun = $j->tahun;
