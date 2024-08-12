@@ -81,7 +81,11 @@
                             data: 'nip',
                             targets: 1,
                             render: function(data, type, row) {
-                                return row.nip.substr(0, 8) + " " + row.nip.substr(8, 6) + " " + row.nip.substr(14, 1) + " " + row.nip.substr(15, 3);
+                                if (row.nip != null) {
+                                    return row.nip.substr(0, 8) + " " + row.nip.substr(8, 6) + " " + row.nip.substr(14, 1) + " " + row.nip.substr(15, 3);
+                                } else {
+                                    return "-";
+                                }
                             }
                         },
                         {
