@@ -17,7 +17,7 @@
                         <div class="position-relative mb-2 col-md-6">
                             <div class="form-floating">
                                 <x-input-float :id="__('name')" type="text" class="e-name" required />
-                                <x-invalid :value=" __('Nama harus diisi')" />
+                                <x-invalid :value="__('Nama harus diisi')" />
                                 <x-label-float :value="__('Nama Lengkap')" />
                             </div>
                         </div>

@@ -253,15 +253,26 @@
                             <div class="row">
                                 <div class="position-relative mb-2 col-md-6 form-floating">
                                     <div class="form-floating">
-                                        <x-input-float :id="__('pd')" type="text" class="e-pd" required list="listPD"
-                                            autocomplete="off" />
+                                        {{-- <x-input-float :id="__('pd')" type="text" class="e-pd" required list="listPD"
+                                            autocomplete="off" /> --}}
+                                        <select class="form-select text-dark" name="pd" required class="e-pd">
+                                            <option selected disabled hidden value="">Pilih perangkat daerah
+                                            </option>
+                                            @foreach (getPerangkat() as $d)
+                                                <option value="{{ $d->nama }}"
+                                                    @if (old('pd') != null && old('pd') == $d->nama) selected @elseif (old('pd') == null && Auth::user()->pd == $d->nama) selected @endif>
+                                                    {{ $d->nama }}
+                                                </option>
+                                            @endforeach
+
+                                        </select>
                                         <x-invalid :value="__('Pilih perangkat daerah')" />
                                         <x-label-float :value="__('Perangkat daerah')" />
-                                        <datalist id="listPD">
+                                        {{-- <datalist id="listPD">
                                             @foreach (getPerangkat() as $n => $d)
                                                 <option value="{{ $d->nama }}"></option>
                                             @endforeach
-                                        </datalist>
+                                        </datalist> --}}
                                     </div>
                                 </div>
 

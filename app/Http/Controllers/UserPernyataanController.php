@@ -19,16 +19,16 @@ class UserPernyataanController extends Controller
         $this->middleware('userOnly');
         $this->middleware('preventBackHistory');
     }
-   
+
     public function formBio(Request $request, $id)
     {
-        $cek=Pernyataan::where('user_id', Auth::user()->id)->where('jadwal_id', $id)->count();
-        if ($cek!=0) {
+        $cek = Pernyataan::where('user_id', Auth::user()->id)->where('jadwal_id', $id)->count();
+        if ($cek != 0) {
             abort(404);
         }
         $request->session()->forget('pernyataan');
         $request->session()->forget('step');
-        $jadwal=Jadwal::find($id);
+        $jadwal = Jadwal::find($id);
         if (masihBuka($jadwal->akhir)) {
             return view('user.bio', compact('jadwal'));
         }
@@ -37,7 +37,7 @@ class UserPernyataanController extends Controller
 
     public function postBio(Request $request, $id)
     {
-        $jadwal=Jadwal::find($id);
+        $jadwal = Jadwal::find($id);
         if (masihBuka($jadwal->akhir)) {
             $request->validate([
                 'email' => 'required|email',
@@ -48,9 +48,9 @@ class UserPernyataanController extends Controller
                 'satker' => 'required'
             ]);
             $data = $request->all();
-            $user=Auth::user();
+            $user = Auth::user();
             $input = $data;
-            $input['id']=Auth::user()->id;
+            $input['id'] = Auth::user()->id;
             $user->update($input);
 
             session(['step' => '1']);
@@ -67,42 +67,42 @@ class UserPernyataanController extends Controller
 
     public function formPoint(Request $request, $id, $point)
     {
-        $jadwal=Jadwal::find($id);
-        $step=session('step');
-        if (masihBuka($jadwal->akhir) && $step!=null) {
+        $jadwal = Jadwal::find($id);
+        $step = session('step');
+        if (masihBuka($jadwal->akhir) && $step != null) {
             switch ([$point, $step]) {
                 case ['1','1']:
                     $request->session()->forget('pernyataan.tanya1');
                     $request->session()->forget('pernyataan.tanya2');
                     $request->session()->forget('pernyataan.tanya3');
                     return view('user.point1', compact('jadwal'));
-                  break;
+                    break;
                 case ['2','2']:
                     return view('user.point1', compact('jadwal'));
-                  break;
+                    break;
                 case ['3','3']:
                     return view('user.point1', compact('jadwal'));
-                  break;
+                    break;
                 default:
-                session(['step' => '1']);
-                return redirect()->route('user.pernyataan.point', [$id,'1']);
-              }
+                    session(['step' => '1']);
+                    return redirect()->route('user.pernyataan.point', [$id,'1']);
+            }
         }
         abort(404);
     }
 
     public function postPoint(Request $request, $id, $point)
     {
-        $jadwal=Jadwal::find($id);
-        $step=session('step');
+        $jadwal = Jadwal::find($id);
+        $step = session('step');
         if (masihBuka($jadwal->akhir)) {
             switch ([$point, $step]) {
                 case ['1','1']:
-                  //--------------------------------------------------------------------
+                    //--------------------------------------------------------------------
                     $request->validate([
                       'p' => 'required|in:0,1'
                     ]);
-                    if ($request->p==1) {
+                    if ($request->p == 1) {
                         $request->session()->put('pernyataan.tanya1', '0');
                         session(['step' => '2']);
                         return redirect()->route('user.pernyataan.point', [$id, session('step')]);
@@ -112,10 +112,10 @@ class UserPernyataanController extends Controller
                     $request->session()->put('pernyataan.tanya2', '0');
                     $request->session()->put('pernyataan.tanya3', '0');
                     return redirect()->route('user.pernyataan.final', [$id]);
-                  //--------------------------------------------------------------------
-                  break;
+                    //--------------------------------------------------------------------
+                    break;
                 case ['2','2']:
-                  //--------------------------------------------------------------------
+                    //--------------------------------------------------------------------
                     $request->validate([
                       'p' => 'required|in:0,1'
                     ]);
@@ -123,15 +123,15 @@ class UserPernyataanController extends Controller
                     $request->session()->put('pernyataan.tanya2', $request->p);
 
                     return redirect()->route('user.pernyataan.point', [$id, session('step')]);
-                  //--------------------------------------------------------------------
-                  break;
+                    //--------------------------------------------------------------------
+                    break;
                 case ['3','3']:
-                  //--------------------------------------------------------------------
+                    //--------------------------------------------------------------------
                     $request->validate([
                       'p' => 'required|in:0,1'
                     ]);
 
-                    if ($request->p==1) {
+                    if ($request->p == 1) {
                         session(['step' => '4']);
                         $request->session()->put('pernyataan.tanya3', $request->p);
                         return redirect()->route('user.pernyataan.lapor', [$id]);
@@ -139,11 +139,11 @@ class UserPernyataanController extends Controller
                     session(['step' => '5']);
                     $request->session()->put('pernyataan.tanya3', $request->p);
                     return redirect()->route('user.pernyataan.final', $id);
-                  //--------------------------------------------------------------------
-                  break;
+                    //--------------------------------------------------------------------
+                    break;
                 default:
-                return redirect()->route('user.pernyataan.point', [$id,'1']);
-              }
+                    return redirect()->route('user.pernyataan.point', [$id,'1']);
+            }
         }
         abort(404);
     }
@@ -151,16 +151,16 @@ class UserPernyataanController extends Controller
     public function formLapor(Request $request, $id)
     {
         // dd(session('pernyataan.tanya1'));
-        if (session('pernyataan.tanya1')==1) {
+        if (session('pernyataan.tanya1') == 1) {
             return redirect()->route('user.pernyataan.point', [$id,'1']);
         }
-        
-        $jadwal=Jadwal::find($id);
-        if (masihBuka($jadwal->akhir) && session('step')!=null) {
-            $d=User::find(Auth::user()->id)->lapor;
-            $range=awalAkhir($jadwal->tahun, $jadwal->semester);
-            $lapor=$d->whereBetween('tanggal', $range)->sortByDesc('id');
-            $count=$lapor->count();
+
+        $jadwal = Jadwal::find($id);
+        if (masihBuka($jadwal->akhir) && session('step') != null) {
+            $d = User::find(Auth::user()->id)->lapor;
+            $range = awalAkhir($jadwal->tahun, $jadwal->semester);
+            $lapor = $d->whereBetween('tanggal', $range)->sortByDesc('id');
+            $count = $lapor->count();
             session(['step' => '4']);
             // dd($count);
             return view('user.lapor2', compact('jadwal', 'lapor', 'range', 'count'));
@@ -170,7 +170,7 @@ class UserPernyataanController extends Controller
 
     public function doneLapor(Request $request, $id)
     {
-        $jadwal=Jadwal::find($id);
+        $jadwal = Jadwal::find($id);
         if (masihBuka($jadwal->akhir)) {
             session(['step' => '5']);
             return redirect()->route('user.pernyataan.final', $id);
@@ -180,11 +180,11 @@ class UserPernyataanController extends Controller
 
     public function formFinal(Request $request, $id)
     {
-        $jadwal=Jadwal::find($id);
-        if (masihBuka($jadwal->akhir) && session('step')!=null) {
-            $d=User::find(Auth::user()->id)->lapor;
-            $range=awalAkhir($jadwal->tahun, $jadwal->semester);
-            $lapor=$d->whereBetween('tanggal', $range)->sortByDesc('id');
+        $jadwal = Jadwal::find($id);
+        if (masihBuka($jadwal->akhir) && session('step') != null) {
+            $d = User::find(Auth::user()->id)->lapor;
+            $range = awalAkhir($jadwal->tahun, $jadwal->semester);
+            $lapor = $d->whereBetween('tanggal', $range)->sortByDesc('id');
 
             // dd($request);
             return view('user.final', compact('jadwal', 'lapor', 'range'));
@@ -194,13 +194,13 @@ class UserPernyataanController extends Controller
 
     public function postFinal(Request $request, $id)
     {
-        $jadwal=Jadwal::find($id);
-        if (masihBuka($jadwal->akhir) && session('step')!=null) {
-            $user=Auth::user();
-            $range=awalAkhir($jadwal->tahun, $jadwal->semester);
-            $pernyataan=Pernyataan::create(session('pernyataan'));
+        $jadwal = Jadwal::find($id);
+        if (masihBuka($jadwal->akhir) && session('step') != null) {
+            $user = Auth::user();
+            $range = awalAkhir($jadwal->tahun, $jadwal->semester);
+            $pernyataan = Pernyataan::create(session('pernyataan'));
             // dd($pernyataan);
-            Lapor::where('user_id', $user->id)->whereBetween('tanggal', $range)->update(['pernyataan_id'=>$pernyataan->id]);
+            Lapor::where('user_id', $user->id)->whereBetween('tanggal', $range)->update(['pernyataan_id' => $pernyataan->id]);
             $request->session()->forget('pernyataan');
             $request->session()->forget('step');
             return redirect()->route('user.daftar')->with('success', 'Data pernyataan berhasil disimpan.');

@@ -41,7 +41,6 @@
             .swal2-styled.swal2-cancel {
                 color: #555 !important;
             }
-
         </style>
     </x-slot>
     <x-slot name="title">
@@ -151,7 +150,8 @@
                                                             pangkat/golongan
                                                         </option>
                                                         @foreach (getPangkat() as $d)
-                                                            <option value="{{ $d->nama }}" @if (old('pangkat') != null && old('pangkat') == $d->nama) selected @elseif (old('pangkat') == null && Auth::user()->pangkat == $d->nama ) selected @endif>
+                                                            <option value="{{ $d->nama }}"
+                                                                @if (old('pangkat') != null && old('pangkat') == $d->nama) selected @elseif (old('pangkat') == null && Auth::user()->pangkat == $d->nama) selected @endif>
                                                                 {{ $d->nama }}
                                                             </option>
                                                         @endforeach
@@ -166,9 +166,20 @@
                                         <div class="row">
                                             <div class="position-relative mb-2 col-md-6 form-floating">
                                                 <div class="form-floating">
-                                                    <x-input-float :id="__('pd')" type="text"
+                                                    {{-- <x-input-float :id="__('pd')" type="text"
                                                         value="{{ old('pd') ?? Auth::user()->pd }}" required
-                                                        autocomplete="off" />
+                                                        autocomplete="off" /> --}}
+                                                    <select class="form-select text-dark" name="pd" required>
+                                                        <option selected disabled hidden value="">Pilih perangkat daerah
+                                                        </option>
+                                                        @foreach (getPerangkat() as $d)
+                                                            <option value="{{ $d->nama }}"
+                                                                @if (old('pd') != null && old('pd') == $d->nama) selected @elseif (old('pd') == null && Auth::user()->pd == $d->nama) selected @endif>
+                                                                {{ $d->nama }}
+                                                            </option>
+                                                        @endforeach
+
+                                                    </select>
                                                     <x-invalid :value="__('Pilih perangkat daerah')" />
                                                     <x-label-float :value="__('Perangkat daerah')" />
                                                 </div>
@@ -352,7 +363,6 @@
 
             /*initiate the autocomplete function on the "myInput" element, and pass along the countries array as possible autocomplete values:*/
             autocomplete(document.getElementById("pd"), dinas);
-
         </script>
     </x-slot>
 </x-user-layout>

@@ -10,7 +10,6 @@
             .file-custom:focus {
                 outline: none;
             }
-
         </style>
         @desktop()
         <style>
@@ -18,7 +17,6 @@
                 min-width: 180px !important;
                 max-width: 700px !important;
             }
-
         </style>
         @enddesktop()
     </x-slot>
@@ -256,7 +254,6 @@
                 });
 
             });
-
         </script>
 
         @if ($errors->any())
@@ -268,7 +265,6 @@
                     confirmButtonText: 'OK',
                     confirmButtonColor: '#fa5c7c'
                 })
-
             </script>
         @endif
     </x-slot>

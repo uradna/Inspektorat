@@ -184,9 +184,20 @@
                                 <div class="row">
                                     <div class="position-relative mb-2 col-md-6 form-floating">
                                         <div class="form-floating">
-                                            <x-input-float :id="__('pd')" type="text"
+                                            {{-- <x-input-float :id="__('pd')" type="text"
                                                 value="{{ old('pd') ?? Auth::user()->pd }}" required
-                                                autocomplete="off" />
+                                                autocomplete="off" /> --}}
+                                            <select class="form-select text-dark" name="pd" required>
+                                                <option selected disabled hidden value="">Pilih perangkat daerah
+                                                </option>
+                                                @foreach (getPerangkat() as $d)
+                                                    <option value="{{ $d->nama }}"
+                                                        @if (old('pd') != null && old('pd') == $d->nama) selected @elseif (old('pd') == null && Auth::user()->pd == $d->nama) selected @endif>
+                                                        {{ $d->nama }}
+                                                    </option>
+                                                @endforeach
+
+                                            </select>
                                             <x-invalid :value="__('Pilih perangkat daerah')" />
                                             <x-label-float :value="__('Perangkat daerah')" />
                                         </div>
