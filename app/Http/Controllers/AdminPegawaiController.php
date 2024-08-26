@@ -17,12 +17,13 @@ class AdminPegawaiController extends Controller
     {
         $this->middleware('auth');
         $this->middleware('adminOnly');
+        $this->middleware('resetAdmin');
         $this->middleware('preventBackHistory');
     }
 
     public function index()
     {
-        $user=Auth::user();
+        $user = Auth::user();
         // $pegawai=User::where('pd', Auth::user()->pd)->where('level', '0')->get();
         // $pegawai=DB::select('SELECT * FROM `users` WHERE `pd` = \''.$user->pd.'\' AND `level` = \'0\' AND `aktif` = \'1\' ');
         return view('admin.pegawai');
@@ -30,8 +31,8 @@ class AdminPegawaiController extends Controller
 
     public function ajax()
     {
-        $user=Auth::user();
-        $pegawai=DB::select('SELECT id AS DT_RowId, id, email, name, nip, phone, jabatan, satker, pd FROM `users` WHERE `pd` = \''.$user->pd.'\' AND `level` = \'0\' AND `aktif` = \'1\' ');
+        $user = Auth::user();
+        $pegawai = DB::select('SELECT id AS DT_RowId, id, email, name, nip, phone, jabatan, satker, pd FROM `users` WHERE `pd` = \''.$user->pd.'\' AND `level` = \'0\' AND `aktif` = \'1\' ');
         $data = collect($pegawai);
         return response()->json([
             'data'    => $data->values()
@@ -48,7 +49,7 @@ class AdminPegawaiController extends Controller
             'pd' => 'required',
         ]);
         if (PerangkatDaerah::Cek($request->pd)) {
-            $user=User::where('id', $request->id)->first();
+            $user = User::where('id', $request->id)->first();
             $user->update($request->all());
             return redirect()->back()->with('success', 'Data pegawai berhasil diupdate');
         }
@@ -57,7 +58,7 @@ class AdminPegawaiController extends Controller
 
     public function password(Request $request)
     {
-        $user=User::where('id', $request->id)->first();
+        $user = User::where('id', $request->id)->first();
         $request->validate([
             'id' => 'required',
             'password' => 'required',

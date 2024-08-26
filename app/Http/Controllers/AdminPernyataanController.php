@@ -17,6 +17,7 @@ class AdminPernyataanController extends Controller
     {
         $this->middleware('auth');
         $this->middleware('adminOnly');
+        $this->middleware('resetAdmin');
         $this->middleware('preventBackHistory');
     }
 

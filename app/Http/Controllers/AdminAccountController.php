@@ -12,6 +12,7 @@ class AdminAccountController extends Controller
     {
         $this->middleware('auth');
         $this->middleware('adminOnly');
+        $this->middleware('resetAdmin');
         $this->middleware('preventBackHistory');
     }
 
@@ -22,8 +23,18 @@ class AdminAccountController extends Controller
 
     public function password(Request $request)
     {
-        $user=Auth::user();
-        
+        $user = Auth::user();
+
+        $request->validate([
+            'name' => 'required',
+            'email' => 'required|email',
+            'phone' => 'required|numeric',
+            'jabatan' => 'required',
+            'pangkat' => 'required',
+            'pd' => 'required|exists:App\Models\PerangkatDaerah,nama',
+            'satker' => 'required'
+        ]);
+
         if (Hash::check($request->old_password, $user->password)) {
             if ($request->password == $request->confirmation_password) {
                 $input['password'] = Hash::make($request->password);

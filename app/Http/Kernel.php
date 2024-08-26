@@ -67,5 +67,6 @@ class Kernel extends HttpKernel
         'userOnly' => \App\Http\Middleware\UserOnly::class,
         'adminOnly' => \App\Http\Middleware\AdminOnly::class,
         'superadminOnly' => \App\Http\Middleware\SuperadminOnly::class,
+        'resetAdmin' => \App\Http\Middleware\ResetAdmminPassword::class,
     ];
 }

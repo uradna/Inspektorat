@@ -16,13 +16,14 @@ class AdminDeletePegawaiController extends Controller
     {
         $this->middleware('auth');
         $this->middleware('adminOnly');
+        $this->middleware('resetAdmin');
         $this->middleware('preventBackHistory');
     }
 
     public function index()
     {
-        $user=Auth::user();
-        $pegawai=Hapus::where('pd', Auth::user()->pd)->where('status', '!=', '3')->orderBy('created_at', 'DESC')->get();
+        $user = Auth::user();
+        $pegawai = Hapus::where('pd', Auth::user()->pd)->where('status', '!=', '3')->orderBy('created_at', 'DESC')->get();
         return view('admin.delete', compact('pegawai'));
     }
 
@@ -32,20 +33,20 @@ class AdminDeletePegawaiController extends Controller
             'user_id' => 'required',
             'file' => 'required',
         ]);
-        if ($request->file->getClientMimeType()!="application/pdf") {
+        if ($request->file->getClientMimeType() != "application/pdf") {
             return redirect()->back()->with('fail', 'Upload gagal. File harus PDF.');
         }
-        $user=User::where('id', $request->user_id)->first();
+        $user = User::where('id', $request->user_id)->first();
 
-        $input=$request->all();
-        $input['pd']=$user->pd;
-        $input['status']='0';
+        $input = $request->all();
+        $input['pd'] = $user->pd;
+        $input['status'] = '0';
 
         $f = $request->file('file');
         if ($f->getClientOriginalExtension() != "pdf") {
             return redirect()->back()->with('fail', 'Upload gagal. File harus PDF.');
         }
-        $nama=explode(' ', $user->name);
+        $nama = explode(' ', $user->name);
         $input['file'] = date("Ymdhis").'-'.$user->nip.'-'.$nama[0].'.'.$f->getClientOriginalExtension();
         $f->move('pdf', $input['file']);
         Hapus::create($input);
@@ -54,10 +55,10 @@ class AdminDeletePegawaiController extends Controller
 
     public function remove(Request $request)
     {
-        $d=Hapus::where('id', $request->id)->first();
-        if ($d!=null) {
-            if (Auth::user()->pd==$d->pd) {
-                $file="pdf/".$d->file;
+        $d = Hapus::where('id', $request->id)->first();
+        if ($d != null) {
+            if (Auth::user()->pd == $d->pd) {
+                $file = "pdf/".$d->file;
                 // dd($file);
                 $d->delete();
                 if (File::exists(public_path($file))) {

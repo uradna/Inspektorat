@@ -54,8 +54,9 @@ class SuperadminAdminController extends Controller
             'id' => 'required',
             'password' => 'required',
         ]);
-        $user=User::find($request->id);
+        $user = User::find($request->id);
         $i['password'] = Hash::make($request->password);
+        $i['aktif'] = 2;
         $user->update($i);
         return redirect()->back()->with('success', 'Password berhasil diupdate. Password baru: '.$request->password);
         // dd($i);
@@ -66,7 +67,7 @@ class SuperadminAdminController extends Controller
         $request->validate([
             'id' => 'required'
         ]);
-        $user=User::find($request->id);
+        $user = User::find($request->id);
         // dd($user);
         $user->delete();
         return redirect()->back()->with('success', 'Data berhasil dihapus.');

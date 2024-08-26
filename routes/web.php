@@ -19,14 +19,17 @@ use App\Http\Controllers\SuperadminPensiunController;
 use App\Http\Controllers\BannerController;
 use App\Http\Controllers\TestAjaxController;
 
+use App\Http\Controllers\AdminResetPasswordController;
+
 //
 // use App\Http\Controllers\TestController;
 
 //
 Route::get('/test', [TestController::class, 'index'])->name('test');
-Route::get('/logout', function () {
-    return view('welcome');
-});
+
+// Route::get('/logout', function () {
+//     return view('welcome');
+// });
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::get('/print/{id}', [PrintController::class, 'print'])->name('user.print');
@@ -39,6 +42,8 @@ Route::get('pernyataan/print/{id}/{user}', [PrintController::class, 'pprint'])->
 Route::get('pernyataan/pdf/{id}/{user}', [PrintController::class, 'ppdf'])->name('pernyataan.pdf');
 
 Route::get('/bantuan', [UserBantuanController::class, 'index'])->name('bantuan');
+
+Route::post('/adminreset', [AdminResetPasswordController::class, 'index'])->name('adminreset');
 // ------------------------------------------------------------------------
 //                           ADMIN ROUTE - START                          |
 // ------------------------------------------------------------------------

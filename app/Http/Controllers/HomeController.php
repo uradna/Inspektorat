@@ -17,19 +17,19 @@ class HomeController extends Controller
         // dd(Auth::user()->level);
         switch (Auth::user()->level) {
             case "0":
-              if (Auth::user()->name==null) {
-                  return redirect()->route('user.account');
-              }
+                if (Auth::user()->name == null) {
+                    return redirect()->route('user.account');
+                }
                 return redirect()->route('user.dashboard');
-              break;
+                break;
             case "1":
                 return redirect()->route('admin.dashboard');
-              break;
+                break;
             case "2":
                 return redirect()->route('superadmin.dashboard');
-              break;
+                break;
             default:
-             
-          }
+
+        }
     }
 }
