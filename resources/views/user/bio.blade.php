@@ -336,7 +336,7 @@
                 let pd = $('#pd').val();
                 Swal.fire({
                     title: 'Anda yakin?',
-                    text: "Pastikan data Perangkat Daerah sudah benar.",
+                    text: "Pastikan data yang anda masukkan sudah benar.",
                     icon: 'warning',
                     iconColor: '#fa5c7c',
                     showCancelButton: true,

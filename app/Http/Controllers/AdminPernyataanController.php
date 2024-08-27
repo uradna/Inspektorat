@@ -30,7 +30,7 @@ class AdminPernyataanController extends Controller
         if ($jadwal_aktif->count() != 0) {
             $aktif = DB::select('SELECT j.id, j.tahun, j.semester, j.akhir, COUNT(pernyataans.id) AS jumlah
                                FROM (select * from jadwals where status = 1) j
-                               LEFT JOIN (select * from pernyataans WHERE pernyataans.pd = "' . $pd . '") AS pernyataans ON j.id = pernyataans.jadwal_id  
+                               LEFT JOIN (select p.id, p.jadwal_id from pernyataans p, users u WHERE p.user_id = u.id AND u.pd = "'.$pd.'") AS pernyataans ON j.id = pernyataans.jadwal_id  
                                GROUP BY j.id
                                ORDER BY j.id DESC');
             // $aktif = $aktif[0];
@@ -53,7 +53,7 @@ class AdminPernyataanController extends Controller
         users.satker,  
         CASE WHEN pernyataans.id IS NULL THEN "0" ELSE "1" END AS pernyataan
         FROM users
-        LEFT JOIN (select * from pernyataans WHERE pernyataans.jadwal_id = "' . $j->id . '" AND pd = "' . Auth::user()->pd . '") AS pernyataans ON users.id = pernyataans.user_id
+        LEFT JOIN (select * from pernyataans WHERE pernyataans.jadwal_id = "' . $j->id . '") AS pernyataans ON users.id = pernyataans.user_id
         WHERE users.pd = "' . Auth::user()->pd . '" AND users.level = "0" AND users.aktif = "1" ORDER BY pernyataan DESC');
 
         $tahun = $j->tahun;
